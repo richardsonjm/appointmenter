@@ -26,6 +26,9 @@
   <%= form.label :zip %><br>
   <%= form.text_field :zip %>
 </div>
+<% if person.is_a? Doctor %>
+  <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true, title: :email} %>
+<% end %>
 <div class="actions">
   <%= form.submit %>
 </div>
