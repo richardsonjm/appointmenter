@@ -27,3 +27,12 @@
   <strong>Zip:</strong>
   <%= person.zip %>
 </p>
+
+<% if person.is_a? Doctor %>
+  <strong>Specialties:</strong>
+  <ul>
+  <% person.specialties.each do |specialty| %>
+    <li><%= specialty.name %></li>
+  <% end %>
+  </ul>
+<% end %>
