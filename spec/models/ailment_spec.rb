@@ -25,4 +25,10 @@ RSpec.describe Ailment, type: :model do
     it { is_expected.to respond_to :patients }
     it { is_expected.to respond_to :patient_ids }
   end
+
+  describe "specialty" do
+    it { is_expected.to belong_to :specialty }
+    it { is_expected.to respond_to :specialty }
+    it { is_expected.to respond_to :specialty_id }
+  end
 end

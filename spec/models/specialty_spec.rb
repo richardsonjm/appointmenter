@@ -20,9 +20,15 @@ RSpec.describe Specialty, type: :model do
     it { is_expected.to respond_to :doctors_specialty_ids }
   end
 
-  describe "specialties" do
+  describe "doctors" do
     it { is_expected.to have_many :doctors }
     it { is_expected.to respond_to :doctors }
     it { is_expected.to respond_to :doctor_ids }
+  end
+
+  describe "ailments" do
+    it { is_expected.to have_many :ailments }
+    it { is_expected.to respond_to :ailments }
+    it { is_expected.to respond_to :ailment_ids }
   end
 end
