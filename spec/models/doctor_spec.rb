@@ -27,4 +27,16 @@ describe Doctor do
     it { is_expected.to respond_to :specialties }
     it { is_expected.to respond_to :specialty_ids }
   end
+
+  describe "appointments" do
+    it { is_expected.to have_many :appointments }
+    it { is_expected.to respond_to :appointments }
+    it { is_expected.to respond_to :appointment_ids }
+  end
+
+  describe "patients" do
+    it { is_expected.to have_many :patients }
+    it { is_expected.to respond_to :patients }
+    it { is_expected.to respond_to :patient_ids }
+  end
 end
