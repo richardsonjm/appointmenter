@@ -14,11 +14,7 @@ RSpec.feature "Doctor" do
 
   scenario "Create doctor with specialty" do
     visit new_doctor_path
-    doctor_attributes = attributes_for(:doctor)
-    doctor_attributes.except(:state).each do |attribute, value|
-      fill_in attribute.to_s.humanize, with: value
-    end
-    select PersonConcern::US_STATES[doctor_attributes[:state]], from: "State"
+    fill_person_form(attributes_for(:doctor))
     select "Heart", from: "doctor_specialty_ids"
     click_button 'Create Doctor'
     expect(Doctor.last.specialties).to include @heart

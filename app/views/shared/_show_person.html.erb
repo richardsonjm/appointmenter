@@ -35,4 +35,11 @@
     <li><%= specialty.name %></li>
   <% end %>
   </ul>
+<% else %>
+  <strong>Ailments:</strong>
+  <ul>
+  <% person.ailments.each do |ailment| %>
+    <li><%= ailment.name %></li>
+  <% end %>
+  </ul>
 <% end %>

@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe PatientsController do
+  let (:rash) { FactoryGirl.create(:ailment, name: "Rash") }
 
-  let(:valid_attributes) { attributes_for :patient }
+  let(:valid_attributes) { attributes_for :patient, ailment_ids: [rash.id] }
 
   let(:invalid_attributes) { attributes_for :patient, email: 'invalid_email' }
 
@@ -53,6 +54,11 @@ describe PatientsController do
         expect(assigns(:patient)).to be_persisted
       end
 
+      it "assigns specialty" do
+        post :create, {:patient => valid_attributes}, valid_session
+        expect(Patient.last.ailments).to include rash
+      end
+
       it "redirects to the created patient" do
         post :create, {:patient => valid_attributes}, valid_session
         expect(response).to redirect_to(Patient.last)
@@ -89,6 +95,16 @@ describe PatientsController do
         put :update, {:id => patient.to_param, :patient => valid_attributes}, valid_session
         expect(assigns(:patient)).to eq(patient)
       end
+
+      it "changes specialty" do
+        fever = FactoryGirl.create(:ailment, name: "fever")
+        patient = Patient.create! valid_attributes
+        put :update, {:id => patient.to_param, :patient => valid_attributes.merge(ailment_ids: [fever.id])}, valid_session
+        patient.reload
+        expect(patient.ailments).to include fever
+        expect(patient.ailments).not_to include rash
+      end
+
 
       it "redirects to the patient" do
         patient = Patient.create! valid_attributes
