@@ -14,11 +14,7 @@ RSpec.feature "Patient" do
 
   scenario "Create patient with ailment" do
     visit new_patient_path
-    patient_attributes = attributes_for(:patient)
-    patient_attributes.except(:state).each do |attribute, value|
-      fill_in attribute.to_s.humanize, with: value
-    end
-    select PersonConcern::US_STATES[patient_attributes[:state]], from: "State"
+    fill_person_form(attributes_for(:patient))
     select "Rash", from: "patient_ailment_ids"
     click_button 'Create Patient'
     expect(Patient.last.ailments).to include @rash
