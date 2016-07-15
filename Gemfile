@@ -57,4 +57,7 @@ group :test do
 
   # Add extra RSpec matchers for validations, etc.
   gem 'shoulda-matchers', '~> 3.1'
+
+  # Use capybara for feature specs
+  gem 'capybara'
 end
