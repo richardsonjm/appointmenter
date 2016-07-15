@@ -23,8 +23,10 @@ RSpec.describe AilmentsController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Ailment. As you add validations to Ailment, be sure to
   # adjust the attributes here as well.
+  let(:specialty) { FactoryGirl.create(:specialty, name: "Primum non nocere") }
+
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:ailment)
+    FactoryGirl.attributes_for(:ailment).merge(specialty_id: specialty.id)
   }
 
   let(:invalid_attributes) {
@@ -81,6 +83,11 @@ RSpec.describe AilmentsController, type: :controller do
         expect(assigns(:ailment)).to be_persisted
       end
 
+      it "assigns specialty" do
+        post :create, {:ailment => valid_attributes}, valid_session
+        expect(Ailment.last.specialty).to eq specialty
+      end
+
       it "redirects to the created ailment" do
         post :create, {:ailment => valid_attributes}, valid_session
         expect(response).to redirect_to(Ailment.last)
@@ -117,6 +124,14 @@ RSpec.describe AilmentsController, type: :controller do
         ailment = Ailment.create! valid_attributes
         put :update, {:id => ailment.to_param, :ailment => valid_attributes}, valid_session
         expect(assigns(:ailment)).to eq(ailment)
+      end
+
+      it "updates specialty" do
+        new_specialty = FactoryGirl.create(:specialty)
+        ailment = Ailment.create! valid_attributes
+        put :update, {:id => ailment.to_param, :ailment => valid_attributes.merge(specialty_id: new_specialty.id)}, valid_session
+        ailment.reload
+        expect(ailment.specialty).to eq new_specialty
       end
 
       it "redirects to the ailment" do

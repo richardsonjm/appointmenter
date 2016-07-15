@@ -69,6 +69,6 @@ class AilmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ailment_params
-      params.require(:ailment).permit(:name)
+      params.require(:ailment).permit(:name, :specialty_id)
     end
 end
