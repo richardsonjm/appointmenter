@@ -25,4 +25,20 @@ RSpec.feature "Appointment", js: true do
       expect(page).to have_content @doctor.name
     }
   end
+
+  scenario "Schedule appointment for patient" do
+    visit patient_path(@patient)
+    select @doctor.name, from: "appointment_doctor_id"
+    appointment_date = Time.now
+    expect {
+      select appointment_date.strftime("%Y"), from: "appointment_date_1i"
+      select appointment_date.strftime("%B"), from: "appointment_date_2i"
+      select appointment_date.strftime("%d"), from: "appointment_date_3i"
+      select appointment_date.strftime("%H"), from: "appointment_date_4i"
+      select appointment_date.strftime("%M"), from: "appointment_date_5i"
+      click_button "Create Appointment"
+      loop until page.evaluate_script('jQuery.active').zero?
+    }.not_to change(Appointment, :count)
+    expect(page).to have_content "can't be less than three days away"
+  end
 end
