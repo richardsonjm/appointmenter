@@ -1,0 +1,26 @@
+<strong>Add new appointment</strong>
+<%= form_for [patient, appointment], remote: true do |f| %>
+  <% if appointment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
+
+      <ul>
+      <% appointment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field">
+    <%= f.label :doctor %><br>
+    <%= f.collection_select :doctor_id, Doctor.all, :id, :name %>
+  </div>
+  <div class="field">
+    <%= f.label :appointment_date %><br>
+    <%= f.datetime_select :date %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

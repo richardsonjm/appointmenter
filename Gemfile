@@ -60,4 +60,10 @@ group :test do
 
   # Use capybara for feature specs
   gem 'capybara'
+
+  # Use phantomjs for js features
+  gem 'poltergeist', '~> 1.8.1'
+
+  # Control database behavior across test processes
+  gem 'database_cleaner', '~> 1.2.0'
 end

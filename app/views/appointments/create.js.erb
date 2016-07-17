@@ -1,0 +1,5 @@
+<% if @appointment.errors.any? %>
+  $('#new-patient-appointment').html('<%= j render(partial: "appointments/form", locals: {patient: @patient, appointment: @appointment}) %>');
+<% else %>
+  $('#patient-appointments').append('<%= j render(@appointment) %>');
+<% end %>
