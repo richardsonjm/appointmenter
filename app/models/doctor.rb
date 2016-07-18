@@ -9,6 +9,10 @@ class Doctor < ActiveRecord::Base
     "Dr. #{super}"
   end
 
+  def name_and_specialties
+    "#{name} (#{specialties.map{|specialty| specialty.name}.join(", ")})"
+  end
+
   def self.patient_doctors(patient)
     specialty_ids = patient.ailments.map {|ailment| ailment.specialty_id}
     Doctor.joins(:doctors_specialties).where(doctors_specialties: {specialty_id: specialty_ids})
