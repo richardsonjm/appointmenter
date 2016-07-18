@@ -4,9 +4,16 @@ FactoryGirl.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
 
-    street { Faker::Address.street_address }
+    sequence(:street) {|n| "10#{n} Broadway"}
     city 'New York'
     state 'NY'
     zip '10012'
+
+    factory :ca_doctor do
+      sequence(:street) {|n| "10#{n} Market"}
+      city 'San Fransico'
+      state 'CA'
+      zip '94101'
+    end
   end
 end

@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature "Appointment", js: true do
   before do
-    dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
-    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: dermotology)
+    @dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
+    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @dermotology)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
-    @doctor = FactoryGirl.create(:doctor, specialties: [dermotology])
+    @doctor = FactoryGirl.create(:doctor, specialties: [@dermotology])
   end
 
   scenario "Schedule appointment for patient" do
@@ -26,7 +26,7 @@ RSpec.feature "Appointment", js: true do
     }
   end
 
-  scenario "Schedule appointment for patient" do
+  scenario "Won't schedule too soon appointment for patient" do
     visit patient_path(@patient)
     select @doctor.name, from: "appointment_doctor_id"
     appointment_date = Time.now
@@ -40,5 +40,11 @@ RSpec.feature "Appointment", js: true do
       loop until page.evaluate_script('jQuery.active').zero?
     }.not_to change(Appointment, :count)
     expect(page).to have_content "can't be less than three days away"
+  end
+
+  scenario "Only show local, specialty matched doctors" do
+    ca_doctor = FactoryGirl.create(:ca_doctor, specialties: [@dermotology])
+    visit patient_path(@patient)
+    expect(page).not_to have_select('appointment_doctor_id', options: [ca_doctor.name_and_specialties])
   end
 end

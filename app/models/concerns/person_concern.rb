@@ -84,6 +84,14 @@ module PersonConcern
     US_STATES[state]
   end
 
+  def full_street_address
+    "#{street}, #{city}, #{state}"
+  end
+
+  def full_street_address_changed?
+    street_changed? || city_changed? || state_changed?
+  end
+
   included do
     validates :email, presence: true, email: true
     validates :first_name, presence: true
@@ -94,5 +102,8 @@ module PersonConcern
     validates :state, presence: true, inclusion: { in: VALID_STATES,
                                                    message: "is not a US State"}
     validates :zip, presence: true, zip_code: true
+
+    geocoded_by :full_street_address
+    after_validation :geocode, if: :full_street_address_changed?
   end
 end

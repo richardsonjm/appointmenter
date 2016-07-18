@@ -14,7 +14,7 @@
 
   <div class="field">
     <%= f.label :doctor %><br>
-    <%= f.collection_select :doctor_id, Doctor.patient_doctors(@patient), :id, :name_and_specialties %>
+    <%= f.collection_select :doctor_id, Doctor.near(@patient.full_street_address, 10).patient_doctors(@patient), :id, :name_and_specialties %>
   </div>
   <div class="field">
     <%= f.label :appointment_date %><br>

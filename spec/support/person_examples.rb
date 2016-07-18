@@ -51,4 +51,10 @@ shared_examples_for 'a person' do
       expect(name.include?(last_name)).to be_truthy
     end
   end
+
+  describe '#full_street_address' do
+    it "combines street, city and state into single string" do
+      expect(subject.full_street_address).to eq "#{subject.street}, #{subject.city}, #{subject.state}"
+    end
+  end
 end
