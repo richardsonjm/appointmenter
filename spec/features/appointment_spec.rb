@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Appointment", js: true do
   before do
     dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
-    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @specialty)
+    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: dermotology)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
     @doctor = FactoryGirl.create(:doctor, specialties: [dermotology])
   end

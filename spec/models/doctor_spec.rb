@@ -39,4 +39,22 @@ describe Doctor do
     it { is_expected.to respond_to :patients }
     it { is_expected.to respond_to :patient_ids }
   end
+
+  describe "#self.patient_doctors" do
+    before do
+      specialties = FactoryGirl.create_list(:specialty, 3)
+      ailments = specialties.map do |specialty|
+        FactoryGirl.create(:ailment, specialty: specialty)
+      end
+      @patient = FactoryGirl.create(:patient, ailments: ailments[0..1])
+      @patient_doctors = [0,1].map do |index|
+        FactoryGirl.create(:doctor, specialties: [specialties[index]])
+      end
+      other_doctors = FactoryGirl.create_list(:doctor, 3, specialties: [specialties[2]])
+    end
+
+    it "returns doctors with specialties that match patient ailments" do
+      expect(Doctor.patient_doctors(@patient)).to eq @patient_doctors
+    end
+  end
 end

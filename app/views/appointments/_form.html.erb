@@ -11,10 +11,10 @@
       </ul>
     </div>
   <% end %>
-  
+
   <div class="field">
     <%= f.label :doctor %><br>
-    <%= f.collection_select :doctor_id, Doctor.all, :id, :name %>
+    <%= f.collection_select :doctor_id, Doctor.patient_doctors(@patient), :id, :name %>
   </div>
   <div class="field">
     <%= f.label :appointment_date %><br>
