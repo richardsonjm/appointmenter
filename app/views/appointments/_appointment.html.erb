@@ -1,5 +1,6 @@
 <tr>
   <td><%= appointment.doctor.name %></td>
   <td><%= appointment.date.to_s %></td>
+  <td><%= link_to 'Details', appointment %></td>
   <td><%= link_to 'Destroy', appointment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 </tr>

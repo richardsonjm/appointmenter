@@ -1,5 +1,5 @@
 <strong>Add new appointment</strong>
-<%= form_for [patient, appointment], remote: true do |f| %>
+<%= form_for [patient, appointment], remote: true, html: {class: "appointment-form"} do |f| %>
   <% if appointment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>

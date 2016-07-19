@@ -1,9 +1,15 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: [:update, :destroy]
+  before_action :set_appointment, only: [:show, :update, :update, :destroy]
+
   # GET /appointments
   # GET /appointments.json
   def index
     @appointments = Appointment.all
+  end
+
+  # GET /appointments/1
+  # GET /appointments/1.json
+  def show
   end
 
   # POST /appointments
@@ -16,17 +22,9 @@ class AppointmentsController < ApplicationController
 
   # PATCH/PUT /appointments/1
   # PATCH/PUT /appointments/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @appointment.update(appointment_params)
-  #       format.html { redirect_to @appointment, notice: 'Appointment was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @appointment }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: @appointment.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def update
+    @appointment.update(appointment_params)
+  end
 
   # DELETE /appointments/1
   # DELETE /appointments/1.json
