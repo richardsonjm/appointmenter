@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Add location data to models
 gem 'geocoder', '~> 1.3.7'
 
+# User interface tools
+gem 'jquery-ui-rails', '~> 4.1.1'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

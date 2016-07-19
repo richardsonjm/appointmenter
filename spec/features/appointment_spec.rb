@@ -1,5 +1,14 @@
 require 'rails_helper'
 
+def create_appointment(datetime)
+  within('.new_appointment') {
+    fill_in 'appointment[date]', with: datetime.strftime("%Y-%m-%d %l:%M %p")
+    page.execute_script "$('#appointment_date').datetimepicker('hide')"
+    click_button "Create Appointment"
+    loop until page.evaluate_script('jQuery.active').zero?
+  }
+end
+
 RSpec.feature "Appointment", js: true do
   before do
     @dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
@@ -11,15 +20,8 @@ RSpec.feature "Appointment", js: true do
   scenario "Schedule appointment for patient" do
     visit patient_path(@patient)
     select @doctor.name, from: "appointment_doctor_id"
-    appointment_date = Time.now + 4.days
     expect {
-      select appointment_date.strftime("%Y"), from: "appointment_date_1i"
-      select appointment_date.strftime("%B"), from: "appointment_date_2i"
-      select appointment_date.strftime("%d"), from: "appointment_date_3i"
-      select appointment_date.strftime("%H"), from: "appointment_date_4i"
-      select appointment_date.strftime("%M"), from: "appointment_date_5i"
-      click_button "Create Appointment"
-      loop until page.evaluate_script('jQuery.active').zero?
+      create_appointment(Time.now + 4.days)
     }.to change(Appointment, :count).by(1)
     within (find('#patient-appointments')) {
       expect(page).to have_content @doctor.name
@@ -29,15 +31,8 @@ RSpec.feature "Appointment", js: true do
   scenario "Won't schedule too soon appointment for patient" do
     visit patient_path(@patient)
     select @doctor.name, from: "appointment_doctor_id"
-    appointment_date = Time.now
     expect {
-      select appointment_date.strftime("%Y"), from: "appointment_date_1i"
-      select appointment_date.strftime("%B"), from: "appointment_date_2i"
-      select appointment_date.strftime("%d"), from: "appointment_date_3i"
-      select appointment_date.strftime("%H"), from: "appointment_date_4i"
-      select appointment_date.strftime("%M"), from: "appointment_date_5i"
-      click_button "Create Appointment"
-      loop until page.evaluate_script('jQuery.active').zero?
+      create_appointment(Time.now)
     }.not_to change(Appointment, :count)
     expect(page).to have_content "can't be less than three days away"
   end

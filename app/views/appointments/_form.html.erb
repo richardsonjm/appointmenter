@@ -17,8 +17,8 @@
     <%= f.collection_select :doctor_id, Doctor.near(@patient.full_street_address, 10).patient_doctors(@patient), :id, :name_and_specialties %>
   </div>
   <div class="field">
-    <%= f.label :appointment_date %><br>
-    <%= f.datetime_select :date %>
+    <%= f.label :date %><br>
+    <%= f.text_field :date %>
   </div>
   <div class="actions">
     <%= f.submit %>
