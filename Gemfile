@@ -3,6 +3,10 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
+
+# Env variables (must be at top)
+gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
+
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -73,3 +77,6 @@ group :test do
   # Control database behavior across test processes
   gem 'database_cleaner', '~> 1.2.0'
 end
+
+# Gems installed outside Gemfile
+# mailcatcher
