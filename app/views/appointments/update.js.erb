@@ -1,0 +1,5 @@
+$('#change-appointment-date').html('<%= j render(partial: "change_date_form") %>');
+$('#appointment_date').datetimepicker({dateFormat: "yy-mm-dd", timeFormat: "h:mm TT"});
+<% unless @appointment.errors.any? %>
+  $('#patient-appointment-date').html('<strong>Date:</strong><%= @appointment.date.to_s %>');
+<% end %>

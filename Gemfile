@@ -23,6 +23,12 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# Add location data to models
+gem 'geocoder', '~> 1.3.7'
+
+# User interface tools
+gem 'jquery-ui-rails', '~> 4.1.1'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -60,4 +66,10 @@ group :test do
 
   # Use capybara for feature specs
   gem 'capybara'
+
+  # Use phantomjs for js features
+  gem 'poltergeist', '~> 1.8.1'
+
+  # Control database behavior across test processes
+  gem 'database_cleaner', '~> 1.2.0'
 end

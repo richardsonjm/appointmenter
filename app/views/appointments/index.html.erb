@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Appointments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Doctor</th>
+      <th>Date</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @appointments.each do |appointment| %>
+      <tr>
+        <td><%= appointment.patient.name %></td>
+        <td><%= appointment.doctor.name %></td>
+        <td><%= appointment.date.to_s %></td>
+        <td><%= link_to 'Details', appointment %></td>
+        <td><%= link_to 'Delete', appointment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

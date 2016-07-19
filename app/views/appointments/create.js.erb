@@ -1,0 +1,12 @@
+<% if @appointment.errors.any? %>
+  $('#new-patient-appointment').html('<%= j render(partial: "appointments/form", locals: {patient: @patient, appointment: @appointment}) %>');
+  $('#appointment_date').datetimepicker({dateFormat: "yy-mm-dd", timeFormat: "h:mm TT"});
+<% else %>
+  $('#patient-appointments').append('<%= j render(@appointment) %>');
+  var error_div = $('#error_explanation')
+  if (error_div) {
+    error_div.remove();
+    $("label[for='appointment_date']").unwrap();
+    $('#appointment_date').unwrap();
+  }
+<% end %>

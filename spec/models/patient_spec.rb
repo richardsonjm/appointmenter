@@ -18,4 +18,16 @@ describe Patient do
     it { is_expected.to respond_to :ailments }
     it { is_expected.to respond_to :ailment_ids }
   end
+
+  describe "appointments" do
+    it { is_expected.to have_many :appointments }
+    it { is_expected.to respond_to :appointments }
+    it { is_expected.to respond_to :appointment_ids }
+  end
+
+  describe "doctors" do
+    it { is_expected.to have_many :doctors }
+    it { is_expected.to respond_to :doctors }
+    it { is_expected.to respond_to :doctor_ids }
+  end
 end
