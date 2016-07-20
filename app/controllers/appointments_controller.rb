@@ -18,6 +18,7 @@ class AppointmentsController < ApplicationController
     @patient = Patient.find(params[:patient_id])
     @appointment = Appointment.new(appointment_params.merge(patient_id: @patient.id))
     @appointment.save
+    send_new_appointment_emails if @appointment.persisted?
   end
 
   # PATCH/PUT /appointments/1
@@ -46,5 +47,11 @@ class AppointmentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
       params.require(:appointment).permit(:date, :doctor_id, :patient_id)
+    end
+
+    def send_new_appointment_emails
+      %w(patient doctor).each do |participant|
+        AppointmentMailer.send("#{participant}_new_appointment", @appointment).deliver_now
+      end
     end
 end

@@ -69,6 +69,12 @@ RSpec.describe AppointmentsController, type: :controller do
         expect(assigns(:appointment)).to be_a(Appointment)
         expect(assigns(:appointment)).to be_persisted
       end
+
+      it "sends new appointment emails" do
+        expect {
+          post :create, {patient_id: patient.id,  :appointment => valid_attributes, format: :js}, valid_session
+        }.to change(ActionMailer::Base.deliveries, :count).by(2)
+      end
     end
 
     context "with invalid params" do
@@ -80,6 +86,12 @@ RSpec.describe AppointmentsController, type: :controller do
       it "re-renders the 'new' template" do
         post :create, {patient_id: patient.id,  :appointment => invalid_attributes, format: :js}, valid_session
         expect(response).to render_template("create")
+      end
+
+      it "does not send new appointment emails" do
+        expect {
+          post :create, {patient_id: patient.id,  :appointment => invalid_attributes, format: :js}, valid_session
+        }.not_to change(ActionMailer::Base.deliveries, :count)
       end
     end
   end
