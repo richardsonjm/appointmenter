@@ -30,6 +30,21 @@ RSpec.feature "Appointment", js: true do
     }
   end
 
+  scenario "Schedule two appointments for patient" do
+    visit patient_path(@patient)
+    expect {
+      fill_and_submit_appointment(Time.now + 4.days) do
+        select @doctor.name, from: "appointment_doctor_id"
+      end
+      fill_and_submit_appointment(Time.now + 5.days) do
+        select @doctor.name, from: "appointment_doctor_id"
+      end
+    }.to change(Appointment, :count).by(2)
+    within (find('#patient-appointments')) {
+      expect(page).to have_content @doctor.name, count: 2
+    }
+  end
+
   scenario "Won't schedule too soon appointment for patient" do
     visit patient_path(@patient)
     expect {
