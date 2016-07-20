@@ -18,8 +18,9 @@
   width="600"
   height="450"
   frameborder="0" style="border:0"
-  src='https://www.google.com/maps/embed/v1/place?key=AIzaSyAwwYeJl12ZnOERXKSnIUeTsNbqhaL78FE
-    &q=<%= "#{@appointment.doctor.latitude},#{@appointment.doctor.longitude}"%>' allowfullscreen>
+  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAwwYeJl12ZnOERXKSnIUeTsNbqhaL78FE
+    &origin=<%= "#{@appointment.patient.latitude},#{@appointment.patient.longitude}" %>
+    &destination=<%= "#{@appointment.doctor.latitude},#{@appointment.doctor.longitude}" %>' allowfullscreen>
 </iframe><br><br>
 
 <div id="change-appointment-date">
