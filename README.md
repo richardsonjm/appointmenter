@@ -24,3 +24,10 @@ You need to do the following:
       3. time and date of appointment
 
 Be sure to include adequate tests for all the functionality you add.
+
+Application uses foreman and dotenv-rails to manage configuration variables.
+To launch type the following command:
+
+```
+foreman start -f Procfile.development
+```
