@@ -1,4 +1,6 @@
 class AppointmentMailer < ApplicationMailer
+  helper :appointments
+
   def patient_new_appointment(appointment)
     @appointment = appointment
     set_doctor_and_patient

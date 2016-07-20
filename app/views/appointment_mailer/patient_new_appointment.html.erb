@@ -2,7 +2,7 @@ Dear <%= @patient.name %>,
 
 You have a new apointment scheduled with <%=  @doctor.name %>.
 
-Date: <%= @appointment.date.to_s %>
+Date: <%= human_readable_date(@appointment.date) %>
 Location: <%=  @doctor.full_street_address %>
 
 Please arrive 15 minutes prior to schedule appointment time.

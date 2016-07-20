@@ -11,7 +11,7 @@
 
 <p id="patient-appointment-date">
   <strong>Date:</strong>
-  <%= @appointment.date.to_s %>
+  <%= human_readable_date(@appointment.date) %>
 </p>
 
 <iframe
