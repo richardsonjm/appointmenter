@@ -7,9 +7,13 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  
+
 <p>
-  <%= link_to 'Home', root_url %> | <%= link_to 'Patients', patients_url %> | <%= link_to 'Doctors', doctors_url %>
+  <%= link_to 'Home', root_url %> |
+  <%= link_to 'Patients', patients_url %> |
+  <%= link_to 'Doctors', doctors_url %> |
+  <%= link_to 'Ailments', ailments_url %> |
+  <%= link_to 'Specialty', specialties_url %>
 </p>
 
 <%= yield %>
