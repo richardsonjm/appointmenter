@@ -14,7 +14,7 @@ class Doctor < ActiveRecord::Base
   end
 
   def self.patient_doctors(patient)
-    specialty_ids = patient.ailments.map {|ailment| ailment.specialty_id}
+    specialty_ids = patient.specialty_ids
     Doctor.joins(:doctors_specialties).where(doctors_specialties: {specialty_id: specialty_ids})
   end
 end
