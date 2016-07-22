@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe DoctorsController do
-  let(:heart) { FactoryGirl.create(:specialty, name: "heart") }
+  let(:specialty_one) { FactoryGirl.create(:specialty, name: Specialty.valid_names.first) }
 
-  let(:valid_attributes) { attributes_for :doctor, specialty_ids: [heart.id] }
+  let(:valid_attributes) { attributes_for :doctor, specialty_ids: [specialty_one.id] }
 
   let(:invalid_attributes) { attributes_for :doctor, email: 'invalid_email' }
 
@@ -56,7 +56,7 @@ describe DoctorsController do
 
       it "assigns specialty" do
         post :create, {:doctor => valid_attributes}, valid_session
-        expect(Doctor.last.specialties).to include heart
+        expect(Doctor.last.specialties).to include specialty_one
       end
 
       it "redirects to the created doctor" do
@@ -97,12 +97,12 @@ describe DoctorsController do
       end
 
       it "changes specialty" do
-        spine = FactoryGirl.create(:specialty, name: "spine")
+        last_specialty = FactoryGirl.create(:specialty, name: Specialty.valid_names.last)
         doctor = Doctor.create! valid_attributes
-        put :update, {:id => doctor.to_param, :doctor => valid_attributes.merge(specialty_ids: [spine.id])}, valid_session
+        put :update, {:id => doctor.to_param, :doctor => valid_attributes.merge(specialty_ids: [last_specialty.id])}, valid_session
         doctor.reload
-        expect(doctor.specialties).to include spine
-        expect(doctor.specialties).not_to include heart
+        expect(doctor.specialties).to include last_specialty
+        expect(doctor.specialties).not_to include specialty_one
       end
 
       it "redirects to the doctor" do

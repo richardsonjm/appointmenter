@@ -12,10 +12,10 @@ end
 
 RSpec.feature "Appointment", js: true do
   before do
-    @dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
-    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @dermotology)
+    @specialty_one = FactoryGirl.create(:specialty, name: Specialty.valid_names.first)
+    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @specialty_one)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
-    @doctor = FactoryGirl.create(:doctor, specialties: [@dermotology])
+    @doctor = FactoryGirl.create(:doctor, specialties: [@specialty_one])
   end
 
   scenario "Schedule appointment for patient" do
@@ -56,7 +56,7 @@ RSpec.feature "Appointment", js: true do
   end
 
   scenario "Only show local, specialty matched doctors" do
-    ca_doctor = FactoryGirl.create(:ca_doctor, specialties: [@dermotology])
+    ca_doctor = FactoryGirl.create(:ca_doctor, specialties: [@specialty_one])
     visit patient_path(@patient)
     expect(page).not_to have_select('appointment_doctor_id', options: [ca_doctor.name_and_specialties])
   end

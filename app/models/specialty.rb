@@ -3,5 +3,10 @@ class Specialty < ActiveRecord::Base
   has_many :doctors, through: :doctors_specialties
   has_many :ailments
 
-  validates_presence_of :name
+  def self.valid_names
+    ENV['SPECIALTIES'].split(':')
+  end
+
+  validates :name, presence: true, inclusion: { in: self.valid_names,
+    message: "%{value} is not a valid specialty" }
 end

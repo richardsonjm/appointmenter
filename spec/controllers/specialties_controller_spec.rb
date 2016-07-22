@@ -103,7 +103,7 @@ RSpec.describe SpecialtiesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        {name: "Newologist"}
+        {name: Specialty.valid_names.last}
       }
 
       it "updates the requested specialty" do

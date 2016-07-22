@@ -23,7 +23,7 @@ RSpec.describe AilmentsController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Ailment. As you add validations to Ailment, be sure to
   # adjust the attributes here as well.
-  let(:specialty) { FactoryGirl.create(:specialty, name: "Primum non nocere") }
+  let(:specialty) { FactoryGirl.create(:specialty, name: Specialty.valid_names.first) }
 
   let(:valid_attributes) {
     FactoryGirl.attributes_for(:ailment).merge(specialty_id: specialty.id)
