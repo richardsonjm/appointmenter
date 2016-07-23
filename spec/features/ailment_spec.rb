@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Ailment" do
   before do
     @specialty = FactoryGirl.create(:specialty, name: Specialty.valid_names.first)
-    @ailment = FactoryGirl.create(:ailment, name: "Rash", specialty: @specialty)
+    @ailment = FactoryGirl.create(:ailment, specialty: @specialty)
   end
 
   scenario "Show the ailment's specialty" do
@@ -13,7 +13,7 @@ RSpec.feature "Ailment" do
 
   scenario "Create ailment with specialty" do
     visit new_ailment_path
-    fill_in "Name", with: "Rash"
+    fill_in "Name", with: Ailment.valid_names.first
     select @specialty.name, from: "ailment_specialty_id"
     click_button 'Create Ailment'
     expect(Ailment.last.specialty).to eq @specialty

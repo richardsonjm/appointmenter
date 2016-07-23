@@ -3,5 +3,11 @@ class Ailment < ActiveRecord::Base
   has_many :patients, through: :patients_ailments
   belongs_to :specialty
 
-  validates_presence_of :name
+  def self.valid_names
+    ENV['AILMENTS'].split(':')
+  end
+
+  validates :name, presence: true, inclusion: { in: self.valid_names,
+    message: "%{value} is not a valid ailment" }
+
 end

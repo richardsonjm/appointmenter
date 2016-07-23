@@ -13,8 +13,8 @@ end
 RSpec.feature "Appointment", js: true do
   before do
     @specialty_one = FactoryGirl.create(:specialty, name: Specialty.valid_names.first)
-    rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @specialty_one)
-    @patient = FactoryGirl.create(:patient, ailments: [rash])
+    ailment = FactoryGirl.create(:ailment, specialty: @specialty_one)
+    @patient = FactoryGirl.create(:patient, ailments: [ailment])
     @doctor = FactoryGirl.create(:doctor, specialties: [@specialty_one])
   end
 

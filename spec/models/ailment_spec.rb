@@ -31,4 +31,10 @@ RSpec.describe Ailment, type: :model do
     it { is_expected.to respond_to :specialty }
     it { is_expected.to respond_to :specialty_id }
   end
+
+  describe "self.valid_names" do
+    it "return valid names from env in an array" do
+      expect(Ailment.valid_names).to eq ENV['AILMENTS'].split(':')
+    end
+  end
 end

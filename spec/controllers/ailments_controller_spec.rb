@@ -110,7 +110,7 @@ RSpec.describe AilmentsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        { name: "New Malady" }
+        { name: Ailment.valid_names.last }
       }
 
       it "updates the requested ailment" do
