@@ -8,6 +8,9 @@ gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
 # Database
 gem 'sqlite3'
 
+# Authentication
+gem 'devise'
+
 # Assets
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
