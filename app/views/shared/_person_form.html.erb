@@ -26,8 +26,13 @@
   <%= form.label :zip %><br>
   <%= form.text_field :zip %>
 </div>
-<% if person.is_a? Doctor %>
-  <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true} %>
-<% else %>
-  <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
+<% if person.has_role? :doctor %>
+  <div class="field">
+    <%= form.label :specialty_ids %><br>
+    <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true} %>
+  </div>
 <% end %>
+<div class="field">
+  <%= form.label :ailment_ids %><br>
+  <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
+</div>

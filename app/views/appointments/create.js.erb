@@ -2,7 +2,7 @@
   $('#new-patient-appointment').html('<%= j render(partial: "appointments/form", locals: {patient: @user, appointment: @appointment}) %>');
   $('#appointment_date').datetimepicker({dateFormat: "yy-mm-dd", timeFormat: "h:mm TT"});
 <% else %>
-  $('#patient-appointments').append('<%= j render(@appointment) %>');
+  $('#doctor-appointments').append('<%= j render(partial: "appointments/doctor_appointment", object: @appointment) %>');
   var error_div = $('#error_explanation')
   if (error_div.length) {
     error_div.remove();

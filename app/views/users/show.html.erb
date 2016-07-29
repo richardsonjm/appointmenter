@@ -6,24 +6,47 @@
 
 <%= render partial: "shared/show_person", locals: { person: @user} %>
 
-<strong>Appointments:</strong>
-<table>
-  <thead>
-    <tr>
-      <th>Doctor</th>
-      <th>Time</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
+<% if @user.has_role? :doctor %>
+  <strong>Patient Appointments:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Time</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
 
-  <tbody id="patient-appointments">
-    <%= render @user.appointments %>
-  </tbody>
-</table><br>
+    <tbody id="patient-appointments">
+      <% @user.patient_appointments.each do |patient_appointment| %>
+        <%= render partial: 'appointments/patient_appointment', object: patient_appointment %>
+      <% end %>
+    </tbody>
+  </table><br>
+<% end %>
 
-<div id="new-patient-appointment">
-  <%= render partial: 'appointments/form', locals: {patient: @user, appointment: Appointment.new } %>
-</div>
+<% if @user.has_role? :patient %>
+  <strong>Doctor Appointments:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Time</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody id="doctor-appointments">
+      <% @user.doctor_appointments.each do |doctor_appointment| %>
+        <%= render partial: 'appointments/doctor_appointment', object: doctor_appointment %>
+      <% end %>
+    </tbody>
+  </table><br>
+
+  <div id="new-patient-appointment">
+    <%= render partial: 'appointments/form', locals: {patient: @user, appointment: Appointment.new } %>
+  </div>
+<% end %>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

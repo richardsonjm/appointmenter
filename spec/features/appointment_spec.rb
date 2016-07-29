@@ -25,7 +25,7 @@ RSpec.feature "Appointment", js: true do
         select @doctor.name, from: "appointment_doctor_id"
       end
     }.to change(Appointment, :count).by(1)
-    within (find('#patient-appointments')) {
+    within (find('#doctor-appointments')) {
       expect(page).to have_content @doctor.name
     }
   end
@@ -40,7 +40,7 @@ RSpec.feature "Appointment", js: true do
         select @doctor.name, from: "appointment_doctor_id"
       end
     }.to change(Appointment, :count).by(2)
-    within (find('#patient-appointments')) {
+    within (find('#doctor-appointments')) {
       expect(page).to have_content @doctor.name, count: 2
     }
   end

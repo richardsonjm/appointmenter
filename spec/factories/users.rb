@@ -17,5 +17,19 @@ FactoryGirl.define do
         patient.add_role :patient
       end
     end
+
+    factory :doctor do
+      sequence(:email) {|n| "doctor#{n}@example.com"}
+      after(:build) do |patient|
+        patient.add_role :patient
+      end
+
+      factory :ca_doctor do
+        sequence(:street) {|n| "10#{n} Market"}
+        city 'San Fransico'
+        state 'CA'
+        zip '94101'
+      end
+    end
   end
 end
