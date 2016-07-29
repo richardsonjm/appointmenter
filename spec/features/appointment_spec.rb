@@ -19,7 +19,7 @@ RSpec.feature "Appointment", js: true do
   end
 
   scenario "Schedule appointment for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now + 4.days) do
         select @doctor.name, from: "appointment_doctor_id"
@@ -31,7 +31,7 @@ RSpec.feature "Appointment", js: true do
   end
 
   scenario "Schedule two appointments for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now + 4.days) do
         select @doctor.name, from: "appointment_doctor_id"
@@ -46,7 +46,7 @@ RSpec.feature "Appointment", js: true do
   end
 
   scenario "Won't schedule too soon appointment for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now) do
         select @doctor.name, from: "appointment_doctor_id"
@@ -57,7 +57,7 @@ RSpec.feature "Appointment", js: true do
 
   scenario "Only show local, specialty matched doctors" do
     ca_doctor = FactoryGirl.create(:ca_doctor, specialties: [@dermotology])
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect(page).not_to have_select('appointment_doctor_id', options: [ca_doctor.name_and_specialties])
   end
 

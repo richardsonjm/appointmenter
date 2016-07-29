@@ -15,9 +15,8 @@ class AppointmentsController < ApplicationController
   # POST /appointments
   # POST /appointments.json
   def create
-    @patient = Patient.find(params[:patient_id])
-    @appointment = Appointment.new(appointment_params.merge(patient_id: @patient.id))
-    @appointment.save
+    @appointment = Appointment.new(appointment_params)
+    @user = User.find(appointment_params['patient_id']) unless @appointment.save
     send_new_appointment_emails if @appointment.persisted?
   end
 
@@ -33,7 +32,7 @@ class AppointmentsController < ApplicationController
     patient = @appointment.patient
     @appointment.destroy
     respond_to do |format|
-      format.html { redirect_to patient_path(patient), notice: 'Appointment was successfully destroyed.' }
+      format.html { redirect_to user_path(patient), notice: 'Appointment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -46,7 +45,7 @@ class AppointmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:date, :doctor_id)
+      params.require(:appointment).permit(:date, :patient_id, :doctor_id)
     end
 
     def send_new_appointment_emails

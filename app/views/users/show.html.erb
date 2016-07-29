@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>
+  User
+</h1>
+
+<%= render partial: "shared/show_person", locals: { person: @user} %>
+
+<strong>Appointments:</strong>
+<table>
+  <thead>
+    <tr>
+      <th>Doctor</th>
+      <th>Time</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody id="patient-appointments">
+    <%= render @user.appointments %>
+  </tbody>
+</table><br>
+
+<div id="new-patient-appointment">
+  <%= render partial: 'appointments/form', locals: {patient: @user, appointment: Appointment.new } %>
+</div>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

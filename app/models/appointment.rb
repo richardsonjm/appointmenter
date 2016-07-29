@@ -1,6 +1,6 @@
 class Appointment < ActiveRecord::Base
   belongs_to :doctor
-  belongs_to :patient
+  belongs_to :patient, class_name: "User"
 
   validates_presence_of :date, :patient, :doctor
   validate :date_must_be_at_least_three_days_away

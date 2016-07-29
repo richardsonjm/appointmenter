@@ -8,8 +8,9 @@ gem 'dotenv-rails', '~> 2.0.1', group: [:development, :test]
 # Database
 gem 'sqlite3'
 
-# Authentication
+# Authentication and authorization
 gem 'devise'
+gem 'rolify'
 
 # Assets
 gem 'sass-rails', '~> 5.0'

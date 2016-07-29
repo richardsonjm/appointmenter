@@ -12,7 +12,7 @@ RSpec.describe AppointmentsController, type: :routing do
     end
 
     it "routes to #create" do
-      expect(:post => "/patients/1/appointments").to route_to("appointments#create", patient_id: "1")
+      expect(:post => "/appointments").to route_to("appointments#create")
     end
 
     it "routes to #update via PUT" do

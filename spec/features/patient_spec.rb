@@ -8,24 +8,24 @@ RSpec.feature "Patient" do
 
   scenario "Show the patient's ailments" do
     @patient.ailments << @rash
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect(page).to have_content @rash.name
   end
 
   scenario "Create patient with ailment" do
-    visit new_patient_path
+    visit new_user_registration_path
     fill_person_form(attributes_for(:patient))
-    select "Rash", from: "patient_ailment_ids"
-    click_button 'Create Patient'
-    expect(Patient.last.ailments).to include @rash
+    select "Rash", from: "user_ailment_ids"
+    click_button 'Sign up'
+    expect(User.last.ailments).to include @rash
   end
 
   scenario "Change patient ailment" do
     fever = FactoryGirl.create(:ailment, name: "Fever")
-    visit edit_patient_path(@patient)
-    select "Fever", from: "patient_ailment_ids"
-    click_button 'Update Patient'
-    expect(Patient.last.ailments).to include fever
-    expect(Patient.last.ailments).not_to include @rash
+    visit edit_user_path(@patient)
+    select "Fever", from: "user_ailment_ids"
+    click_button 'Update User'
+    expect(User.last.ailments).to include fever
+    expect(User.last.ailments).not_to include @rash
   end
 end

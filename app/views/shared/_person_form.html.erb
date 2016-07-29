@@ -31,6 +31,3 @@
 <% else %>
   <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
 <% end %>
-<div class="actions">
-  <%= form.submit %>
-</div>
