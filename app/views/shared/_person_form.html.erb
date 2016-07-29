@@ -36,3 +36,8 @@
   <%= form.label :ailment_ids %><br>
   <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
 </div>
+<% if current_user && current_user.has_role?(:admin) %>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
