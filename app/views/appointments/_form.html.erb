@@ -1,5 +1,5 @@
 <strong>Add new appointment</strong>
-<%= form_for [patient, appointment], remote: true, html: {class: "appointment-form"} do |f| %>
+<%= form_for appointment, remote: true, html: {class: "appointment-form"} do |f| %>
   <% if appointment.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
@@ -14,12 +14,13 @@
 
   <div class="field">
     <%= f.label :doctor %><br>
-    <%= f.collection_select :doctor_id, Doctor.near(@patient.full_street_address, 10).patient_doctors(@patient), :id, :name_and_specialties %>
+    <%= f.collection_select :doctor_id, User.with_role(:doctor).near(@user.full_street_address, 10).patient_doctors(@user), :id, :name_and_specialties %>
   </div>
   <div class="field">
     <%= f.label :date %><br>
     <%= f.text_field :date %>
   </div>
+  <%= f.hidden_field :patient_id, value: @user.id %>
   <div class="actions">
     <%= f.submit %>
   </div>

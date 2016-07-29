@@ -1,0 +1,13 @@
+<p>
+  <%= link_to 'Home', current_user ? user_path(current_user) : new_user_session_path %>
+  <% if user_signed_in? %>
+    | <%= link_to current_user.has_role?(:admin) ? 'Users' : 'Doctors', users_url %> |
+    <%= link_to 'Ailments', ailments_url %> |
+    <%= link_to 'Specialty', specialties_url %> |
+    <%= link_to current_user.email, edit_user_registration_path, title: "Account" %> |
+    <%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, method: 'delete' %>
+  <% else %>
+    <%= link_to I18n.t('devise.sessions.sign_in'), new_user_session_path %>
+    <%= link_to I18n.t('devise.registrations.sign_up'), new_user_registration_path %>
+  <% end %>
+</p>

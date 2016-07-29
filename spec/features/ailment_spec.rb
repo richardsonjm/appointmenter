@@ -7,11 +7,13 @@ RSpec.feature "Ailment" do
   end
 
   scenario "Show the ailment's specialty" do
+    sign_in_as(FactoryGirl.create(:patient))
     visit ailment_path(@ailment)
     expect(page).to have_content @specialty.name
   end
 
   scenario "Create ailment with specialty" do
+    sign_in_as(FactoryGirl.create(:admin))
     visit new_ailment_path
     fill_in "Name", with: "Rash"
     select "Dermotologist", from: "ailment_specialty_id"
@@ -20,6 +22,7 @@ RSpec.feature "Ailment" do
   end
 
   scenario "Change ailment specialty" do
+    sign_in_as(FactoryGirl.create(:admin))
     new_specialty = FactoryGirl.create(:specialty)
     visit edit_ailment_path(@ailment)
     select new_specialty.name, from: "ailment_specialty_id"

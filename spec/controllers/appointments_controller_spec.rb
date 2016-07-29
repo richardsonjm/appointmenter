@@ -30,119 +30,124 @@ RSpec.describe AppointmentsController, type: :controller do
   end
 
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:appointment).merge(doctor_id: @doctor.id)
+    FactoryGirl.attributes_for(:appointment).merge(doctor_id: @doctor.id, patient_id: @patient.id)
   }
 
   let(:invalid_attributes) {
-    FactoryGirl.attributes_for(:appointment, date: "").merge(doctor_id: @doctor.id)
+    FactoryGirl.attributes_for(:appointment, date: "").merge(doctor_id: @doctor.id, patient_id: @patient.id)
   }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # AppointmentsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  describe 'as an admin' do
+    before { sign_in FactoryGirl.create(:admin) }
 
-  describe "GET #index" do
-    it "assigns all appointments as @appointments" do
-      appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-      get :index, {}, valid_session
-      expect(assigns(:appointments)).to eq([appointment])
-    end
-  end
-
-  describe "GET #show" do
-    it "assigns the requested doctor as @doctor" do
-      appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-      get :show, {:id => appointment.to_param}, valid_session
-      expect(assigns(:appointment)).to eq(appointment)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Appointment" do
-        expect {
-          post :create, {patient_id: @patient.id,  :appointment => valid_attributes, format: :js}, valid_session
-        }.to change(Appointment, :count).by(1)
-      end
-
-      it "assigns a newly created appointment as @appointment" do
-        post :create, {patient_id: @patient.id,  :appointment => valid_attributes, format: :js}, valid_session
-        expect(assigns(:appointment)).to be_a(Appointment)
-        expect(assigns(:appointment)).to be_persisted
-      end
-
-      it "sends new appointment emails" do
-        expect {
-          post :create, {patient_id: @patient.id,  :appointment => valid_attributes, format: :js}, valid_session
-        }.to change(ActionMailer::Base.deliveries, :count).by(2)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns a newly created but unsaved appointment as @appointment" do
-        post :create, {patient_id: @patient.id,  :appointment => invalid_attributes, format: :js}, valid_session
-        expect(assigns(:appointment)).to be_a_new(Appointment)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {patient_id: @patient.id,  :appointment => invalid_attributes, format: :js}, valid_session
-        expect(response).to render_template("create")
-      end
-
-      it "does not send new appointment emails" do
-        expect {
-          post :create, {patient_id: @patient.id,  :appointment => invalid_attributes, format: :js}, valid_session
-        }.not_to change(ActionMailer::Base.deliveries, :count)
+    describe "GET #index" do
+      it "assigns all appointments as @appointments" do
+        appointment = FactoryGirl.create(:appointment, patient: @patient)
+        get :index, {}
+        expect(assigns(:appointments)).to eq([appointment])
       end
     end
   end
-  #
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) { FactoryGirl.attributes_for(:appointment) }
 
-      it "updates the requested appointment" do
-        appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-        put :update, {:id => appointment.to_param, :appointment => new_attributes, format: :js}, valid_session
-        appointment.reload
-        expect(appointment.date.utc.to_s).to eq new_attributes[:date].utc.to_s
-      end
+  describe 'as a patient' do
+    before do
+      sign_in @patient
+    end
 
-      it "assigns the requested appointment as @appointment" do
-        appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-        put :update, {:id => appointment.to_param, :appointment => valid_attributes, format: :js}, valid_session
+    context "GET #show" do
+      it "assigns the requested doctor as @doctor" do
+        appointment = Appointment.create! valid_attributes
+        get :show, {:id => appointment.to_param}
         expect(assigns(:appointment)).to eq(appointment)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the appointment as @appointment" do
-        appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-        put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}, valid_session
-        expect(assigns(:appointment)).to eq(appointment)
+    context "POST #create" do
+      context "with valid params" do
+        it "creates a new Appointment" do
+          expect {
+            post :create, {:appointment => valid_attributes, format: :js}
+          }.to change(Appointment, :count).by(1)
+        end
+
+        it "assigns a newly created appointment as @appointment" do
+          post :create, {:appointment => valid_attributes, format: :js}
+          expect(assigns(:appointment)).to be_a(Appointment)
+          expect(assigns(:appointment)).to be_persisted
+        end
+
+        it "sends new appointment emails" do
+          expect {
+            post :create, {:appointment => valid_attributes, format: :js}
+          }.to change(ActionMailer::Base.deliveries, :count).by(2)
+        end
       end
 
-      it "re-renders the 'edit' template" do
-        appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-        put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}, valid_session
-        expect(response).to render_template("update")
+      context "with invalid params" do
+        it "assigns a newly created but unsaved appointment as @appointment" do
+          post :create, {:appointment => invalid_attributes, format: :js}
+          expect(assigns(:appointment)).to be_a_new(Appointment)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:appointment => invalid_attributes, format: :js}
+          expect(response).to render_template("create")
+        end
+
+        it "does not send new appointment emails" do
+          expect {
+            post :create, {:appointment => invalid_attributes, format: :js}
+          }.not_to change(ActionMailer::Base.deliveries, :count)
+        end
       end
     end
-  end
+    #
+    context "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) { FactoryGirl.attributes_for(:appointment) }
 
-  describe "DELETE #destroy" do
-    it "destroys the requested appointment" do
-      appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-      expect {
-        delete :destroy, {:id => appointment.to_param}, valid_session
-      }.to change(Appointment, :count).by(-1)
+        it "updates the requested appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => new_attributes, format: :js}
+          appointment.reload
+          expect(appointment.date.utc.to_s).to eq new_attributes[:date].utc.to_s
+        end
+
+        it "assigns the requested appointment as @appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => valid_attributes, format: :js}
+          expect(assigns(:appointment)).to eq(appointment)
+        end
+      end
+
+      context "with invalid params" do
+        it "assigns the appointment as @appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
+          expect(assigns(:appointment)).to eq(appointment)
+        end
+
+        it "re-renders the 'edit' template" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
+          expect(response).to render_template("update")
+        end
+      end
     end
 
-    it "redirects to the appointments list" do
-      appointment = Appointment.create! valid_attributes.merge(patient_id: @patient.id)
-      delete :destroy, {:id => appointment.to_param}, valid_session
-      expect(response).to redirect_to patient_path(@patient)
+    context "DELETE #destroy" do
+      it "destroys the requested appointment" do
+        appointment = Appointment.create! valid_attributes
+        expect {
+          delete :destroy, {:id => appointment.to_param}
+        }.to change(Appointment, :count).by(-1)
+      end
+
+      it "redirects to the appointments list" do
+        appointment = Appointment.create! valid_attributes
+        delete :destroy, {:id => appointment.to_param}
+        expect(response).to redirect_to user_path(@patient)
+      end
     end
   end
 end

@@ -76,10 +76,6 @@ module PersonConcern
     end
   end
 
-  def name
-    "#{first_name} #{last_name}"
-  end
-
   def state_name
     US_STATES[state]
   end

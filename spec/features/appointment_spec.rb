@@ -16,22 +16,23 @@ RSpec.feature "Appointment", js: true do
     rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @dermotology)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
     @doctor = FactoryGirl.create(:doctor, specialties: [@dermotology])
+    sign_in_as(@patient)
   end
 
   scenario "Schedule appointment for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now + 4.days) do
         select @doctor.name, from: "appointment_doctor_id"
       end
     }.to change(Appointment, :count).by(1)
-    within (find('#patient-appointments')) {
+    within (find('#doctor-appointments')) {
       expect(page).to have_content @doctor.name
     }
   end
 
   scenario "Schedule two appointments for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now + 4.days) do
         select @doctor.name, from: "appointment_doctor_id"
@@ -40,13 +41,13 @@ RSpec.feature "Appointment", js: true do
         select @doctor.name, from: "appointment_doctor_id"
       end
     }.to change(Appointment, :count).by(2)
-    within (find('#patient-appointments')) {
+    within (find('#doctor-appointments')) {
       expect(page).to have_content @doctor.name, count: 2
     }
   end
 
   scenario "Won't schedule too soon appointment for patient" do
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect {
       fill_and_submit_appointment(Time.now) do
         select @doctor.name, from: "appointment_doctor_id"
@@ -57,7 +58,7 @@ RSpec.feature "Appointment", js: true do
 
   scenario "Only show local, specialty matched doctors" do
     ca_doctor = FactoryGirl.create(:ca_doctor, specialties: [@dermotology])
-    visit patient_path(@patient)
+    visit user_path(@patient)
     expect(page).not_to have_select('appointment_doctor_id', options: [ca_doctor.name_and_specialties])
   end
 

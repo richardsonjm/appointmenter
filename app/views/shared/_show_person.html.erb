@@ -28,14 +28,16 @@
   <%= person.zip %>
 </p>
 
-<% if person.is_a? Doctor %>
+<% if person.has_role? :doctor %>
   <strong>Specialties:</strong>
   <ul>
   <% person.specialties.each do |specialty| %>
     <li><%= specialty.name %></li>
   <% end %>
   </ul>
-<% else %>
+<% end %>
+
+<% if person.ailments.any? %>
   <strong>Ailments:</strong>
   <ul>
   <% person.ailments.each do |ailment| %>

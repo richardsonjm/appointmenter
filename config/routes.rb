@@ -1,11 +1,9 @@
 Rails.application.routes.draw do
-  root 'patients#index'
-
+  root 'users#index'
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   resources :specialties
   resources :ailments
   resources :doctors
-  resources :patients do
-    resources :appointments, only: [:create]
-  end
-  resources :appointments, only: [:index, :show, :update, :destroy]
+  resources :users, except: [:new, :create]
+  resources :appointments, only: [:index, :show, :create, :update, :destroy]
 end

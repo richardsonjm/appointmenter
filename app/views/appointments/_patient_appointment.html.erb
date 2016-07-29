@@ -1,0 +1,6 @@
+<tr>
+  <td><%= patient_appointment.patient.name %></td>
+  <td><%= human_readable_date(patient_appointment.date) %></td>
+  <td><%= link_to 'Details', patient_appointment %></td>
+  <td><%= link_to 'Destroy', patient_appointment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>

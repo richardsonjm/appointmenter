@@ -17,3 +17,6 @@ end
 [orthopedics, opthamology, cardiology].each do |specialty|
   FactoryGirl.create(:doctor, specialties: [specialty])
 end
+
+# Admin
+FactoryGirl.create(:admin)
