@@ -111,6 +111,7 @@ RSpec.configure do |config|
 
   #Test helpers
   config.include Person::TestHelpers, type: :feature
+  config.include Devise::TestHelpers, type: :controller
 end
 
 # Define all available shoulda matchers for use with RSpec

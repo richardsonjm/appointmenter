@@ -7,20 +7,20 @@ describe UsersController do
 
   let(:invalid_attributes) { attributes_for :user, email: 'invalid_email' }
 
-  let(:valid_session) { {} }
+  before { sign_in FactoryGirl.create(:patient)}
 
   describe "GET #index" do
     it "assigns all users as @users" do
       user = User.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:users)).to eq([user])
+      get :index, {}
+      expect(assigns(:users)).to eq([User.first, user])
     end
   end
 
   describe "GET #show" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
-      get :show, {:id => user.to_param}, valid_session
+      get :show, {:id => user.to_param}
       expect(assigns(:user)).to eq(user)
     end
   end
@@ -28,7 +28,7 @@ describe UsersController do
   describe "GET #edit" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
-      get :edit, {:id => user.to_param}, valid_session
+      get :edit, {:id => user.to_param}
       expect(assigns(:user)).to eq(user)
     end
   end
@@ -39,7 +39,7 @@ describe UsersController do
 
       it "updates the requested user" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => new_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => new_attributes}
         user.reload
         expect(user.first_name).to eq 'John'
         expect(user.last_name).to eq 'Doe'
@@ -47,14 +47,14 @@ describe UsersController do
 
       it "assigns the requested user as @user" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => valid_attributes}
         expect(assigns(:user)).to eq(user)
       end
 
       it "changes specialty" do
         fever = FactoryGirl.create(:ailment, name: "fever")
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes.merge(ailment_ids: [fever.id])}, valid_session
+        put :update, {:id => user.to_param, :user => valid_attributes.merge(ailment_ids: [fever.id])}
         user.reload
         expect(user.ailments).to include fever
         expect(user.ailments).not_to include rash
@@ -63,7 +63,7 @@ describe UsersController do
 
       it "redirects to the user" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => valid_attributes}
         expect(response).to redirect_to(user)
       end
     end
@@ -71,13 +71,13 @@ describe UsersController do
     context "with invalid params" do
       it "assigns the user as @user" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => invalid_attributes}
         expect(assigns(:user)).to eq(user)
       end
 
       it "re-renders the 'edit' template" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => invalid_attributes}
         expect(response).to render_template("edit")
       end
     end
@@ -87,13 +87,13 @@ describe UsersController do
     it "destroys the requested user" do
       user = User.create! valid_attributes
       expect {
-        delete :destroy, {:id => user.to_param}, valid_session
+        delete :destroy, {:id => user.to_param}
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
       user = User.create! valid_attributes
-      delete :destroy, {:id => user.to_param}, valid_session
+      delete :destroy, {:id => user.to_param}
       expect(response).to redirect_to(users_url)
     end
   end

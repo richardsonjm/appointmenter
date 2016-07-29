@@ -1,4 +1,5 @@
 class AilmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_ailment, only: [:show, :edit, :update, :destroy]
 
   # GET /ailments
