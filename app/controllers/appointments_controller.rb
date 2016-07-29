@@ -23,6 +23,7 @@ class AppointmentsController < ApplicationController
   # PATCH/PUT /appointments/1
   # PATCH/PUT /appointments/1.json
   def update
+    @appointment.update(appointment_params)
   end
 
   # DELETE /appointments/1
