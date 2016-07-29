@@ -1,11 +1,10 @@
 class AppointmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_appointment, only: [:show, :update, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /appointments
   # GET /appointments.json
   def index
-    @appointments = Appointment.all
   end
 
   # GET /appointments/1
@@ -24,7 +23,6 @@ class AppointmentsController < ApplicationController
   # PATCH/PUT /appointments/1
   # PATCH/PUT /appointments/1.json
   def update
-    @appointment.update(appointment_params)
   end
 
   # DELETE /appointments/1
@@ -39,11 +37,6 @@ class AppointmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_appointment
-      @appointment = Appointment.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
       params.require(:appointment).permit(:date, :patient_id, :doctor_id)

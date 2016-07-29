@@ -1,11 +1,10 @@
 class SpecialtiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_specialty, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /specialties
   # GET /specialties.json
   def index
-    @specialties = Specialty.all
   end
 
   # GET /specialties/1
@@ -15,7 +14,6 @@ class SpecialtiesController < ApplicationController
 
   # GET /specialties/new
   def new
-    @specialty = Specialty.new
   end
 
   # GET /specialties/1/edit
@@ -63,11 +61,6 @@ class SpecialtiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_specialty
-      @specialty = Specialty.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def specialty_params
       params.require(:specialty).permit(:name)

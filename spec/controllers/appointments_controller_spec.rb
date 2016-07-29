@@ -37,109 +37,117 @@ RSpec.describe AppointmentsController, type: :controller do
     FactoryGirl.attributes_for(:appointment, date: "").merge(doctor_id: @doctor.id, patient_id: @patient.id)
   }
 
-  before { sign_in FactoryGirl.create(:patient)}
+  describe 'as an admin' do
+    before { sign_in FactoryGirl.create(:admin) }
 
-  describe "GET #index" do
-    it "assigns all appointments as @appointments" do
-      appointment = Appointment.create! valid_attributes
-      get :index, {}
-      expect(assigns(:appointments)).to eq([appointment])
+    describe "GET #index" do
+      it "assigns all appointments as @appointments" do
+        appointment = FactoryGirl.create(:appointment, patient: @patient)
+        get :index, {}
+        expect(assigns(:appointments)).to eq([appointment])
+      end
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested doctor as @doctor" do
-      appointment = Appointment.create! valid_attributes
-      get :show, {:id => appointment.to_param}
-      expect(assigns(:appointment)).to eq(appointment)
+  describe 'as a patient' do
+    before do
+      sign_in @patient
     end
-  end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Appointment" do
-        expect {
-          post :create, {:appointment => valid_attributes, format: :js}
-        }.to change(Appointment, :count).by(1)
-      end
-
-      it "assigns a newly created appointment as @appointment" do
-        post :create, {:appointment => valid_attributes, format: :js}
-        expect(assigns(:appointment)).to be_a(Appointment)
-        expect(assigns(:appointment)).to be_persisted
-      end
-
-      it "sends new appointment emails" do
-        expect {
-          post :create, {:appointment => valid_attributes, format: :js}
-        }.to change(ActionMailer::Base.deliveries, :count).by(2)
+    context "GET #show" do
+      it "assigns the requested doctor as @doctor" do
+        appointment = Appointment.create! valid_attributes
+        get :show, {:id => appointment.to_param}
+        expect(assigns(:appointment)).to eq(appointment)
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved appointment as @appointment" do
-        post :create, {:appointment => invalid_attributes, format: :js}
-        expect(assigns(:appointment)).to be_a_new(Appointment)
+    context "POST #create" do
+      context "with valid params" do
+        it "creates a new Appointment" do
+          expect {
+            post :create, {:appointment => valid_attributes, format: :js}
+          }.to change(Appointment, :count).by(1)
+        end
+
+        it "assigns a newly created appointment as @appointment" do
+          post :create, {:appointment => valid_attributes, format: :js}
+          expect(assigns(:appointment)).to be_a(Appointment)
+          expect(assigns(:appointment)).to be_persisted
+        end
+
+        it "sends new appointment emails" do
+          expect {
+            post :create, {:appointment => valid_attributes, format: :js}
+          }.to change(ActionMailer::Base.deliveries, :count).by(2)
+        end
       end
 
-      it "re-renders the 'new' template" do
-        post :create, {:appointment => invalid_attributes, format: :js}
-        expect(response).to render_template("create")
-      end
-
-      it "does not send new appointment emails" do
-        expect {
+      context "with invalid params" do
+        it "assigns a newly created but unsaved appointment as @appointment" do
           post :create, {:appointment => invalid_attributes, format: :js}
-        }.not_to change(ActionMailer::Base.deliveries, :count)
+          expect(assigns(:appointment)).to be_a_new(Appointment)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:appointment => invalid_attributes, format: :js}
+          expect(response).to render_template("create")
+        end
+
+        it "does not send new appointment emails" do
+          expect {
+            post :create, {:appointment => invalid_attributes, format: :js}
+          }.not_to change(ActionMailer::Base.deliveries, :count)
+        end
       end
     end
-  end
-  #
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) { FactoryGirl.attributes_for(:appointment) }
+    #
+    context "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) { FactoryGirl.attributes_for(:appointment) }
 
-      it "updates the requested appointment" do
-        appointment = Appointment.create! valid_attributes
-        put :update, {:id => appointment.to_param, :appointment => new_attributes, format: :js}
-        appointment.reload
-        expect(appointment.date.utc.to_s).to eq new_attributes[:date].utc.to_s
+        it "updates the requested appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => new_attributes, format: :js}
+          appointment.reload
+          expect(appointment.date.utc.to_s).to eq new_attributes[:date].utc.to_s
+        end
+
+        it "assigns the requested appointment as @appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => valid_attributes, format: :js}
+          expect(assigns(:appointment)).to eq(appointment)
+        end
       end
 
-      it "assigns the requested appointment as @appointment" do
-        appointment = Appointment.create! valid_attributes
-        put :update, {:id => appointment.to_param, :appointment => valid_attributes, format: :js}
-        expect(assigns(:appointment)).to eq(appointment)
+      context "with invalid params" do
+        it "assigns the appointment as @appointment" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
+          expect(assigns(:appointment)).to eq(appointment)
+        end
+
+        it "re-renders the 'edit' template" do
+          appointment = Appointment.create! valid_attributes
+          put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
+          expect(response).to render_template("update")
+        end
       end
     end
 
-    context "with invalid params" do
-      it "assigns the appointment as @appointment" do
+    context "DELETE #destroy" do
+      it "destroys the requested appointment" do
         appointment = Appointment.create! valid_attributes
-        put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
-        expect(assigns(:appointment)).to eq(appointment)
+        expect {
+          delete :destroy, {:id => appointment.to_param}
+        }.to change(Appointment, :count).by(-1)
       end
 
-      it "re-renders the 'edit' template" do
+      it "redirects to the appointments list" do
         appointment = Appointment.create! valid_attributes
-        put :update, {:id => appointment.to_param, :appointment => invalid_attributes, format: :js}
-        expect(response).to render_template("update")
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested appointment" do
-      appointment = Appointment.create! valid_attributes
-      expect {
         delete :destroy, {:id => appointment.to_param}
-      }.to change(Appointment, :count).by(-1)
-    end
-
-    it "redirects to the appointments list" do
-      appointment = Appointment.create! valid_attributes
-      delete :destroy, {:id => appointment.to_param}
-      expect(response).to redirect_to user_path(@patient)
+        expect(response).to redirect_to user_path(@patient)
+      end
     end
   end
 end

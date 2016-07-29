@@ -1,11 +1,10 @@
 class AilmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_ailment, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /ailments
   # GET /ailments.json
   def index
-    @ailments = Ailment.all
   end
 
   # GET /ailments/1
@@ -15,7 +14,6 @@ class AilmentsController < ApplicationController
 
   # GET /ailments/new
   def new
-    @ailment = Ailment.new
   end
 
   # GET /ailments/1/edit
@@ -25,8 +23,6 @@ class AilmentsController < ApplicationController
   # POST /ailments
   # POST /ailments.json
   def create
-    @ailment = Ailment.new(ailment_params)
-
     respond_to do |format|
       if @ailment.save
         format.html { redirect_to @ailment, notice: 'Ailment was successfully created.' }
@@ -63,11 +59,6 @@ class AilmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ailment
-      @ailment = Ailment.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def ailment_params
       params.require(:ailment).permit(:name, :specialty_id)

@@ -16,6 +16,7 @@ FactoryGirl.define do
       sequence(:email) {|n| "patient#{n}@example.com"}
       after(:build) do |patient|
         patient.add_role :patient
+        patient.ailments << FactoryGirl.create(:ailment) unless patient.ailments.any?
       end
     end
 
@@ -23,6 +24,7 @@ FactoryGirl.define do
       sequence(:email) {|n| "doctor#{n}@example.com"}
       after(:build) do |doctor|
         doctor.add_role :doctor
+        doctor.specialties << FactoryGirl.create(:specialty) unless doctor.specialties.any?
       end
 
       factory :ca_doctor do

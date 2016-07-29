@@ -33,139 +33,145 @@ RSpec.describe AilmentsController, type: :controller do
     FactoryGirl.attributes_for(:ailment, name: "")
   }
 
-  before { sign_in FactoryGirl.create(:patient)}
 
-  describe "GET #index" do
-    it "assigns all ailments as @ailments" do
-      ailment = Ailment.create! valid_attributes
-      get :index, {}
-      expect(assigns(:ailments)).to eq([ailment])
-    end
-  end
+  describe 'as a patient' do
+    before { sign_in FactoryGirl.create(:patient)}
 
-  describe "GET #show" do
-    it "assigns the requested ailment as @ailment" do
-      ailment = Ailment.create! valid_attributes
-      get :show, {:id => ailment.to_param}
-      expect(assigns(:ailment)).to eq(ailment)
-    end
-  end
-  #
-  describe "GET #new" do
-    it "assigns a new ailment as @ailment" do
-      get :new, {}
-      expect(assigns(:ailment)).to be_a_new(Ailment)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested ailment as @ailment" do
-      ailment = Ailment.create! valid_attributes
-      get :edit, {:id => ailment.to_param}
-      expect(assigns(:ailment)).to eq(ailment)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Ailment" do
-        expect {
-          post :create, {:ailment => valid_attributes}
-        }.to change(Ailment, :count).by(1)
-      end
-
-      it "assigns a newly created ailment as @ailment" do
-        post :create, {:ailment => valid_attributes}
-        expect(assigns(:ailment)).to be_a(Ailment)
-        expect(assigns(:ailment)).to be_persisted
-      end
-
-      it "assigns specialty" do
-        post :create, {:ailment => valid_attributes}
-        expect(Ailment.last.specialty).to eq specialty
-      end
-
-      it "redirects to the created ailment" do
-        post :create, {:ailment => valid_attributes}
-        expect(response).to redirect_to(Ailment.last)
+    describe "GET #index" do
+      it "assigns all ailments as @ailments" do
+        ailment = Ailment.first
+        get :index, {}
+        expect(assigns(:ailments)).to eq([ailment])
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved ailment as @ailment" do
-        post :create, {:ailment => invalid_attributes}
-        expect(assigns(:ailment)).to be_a_new(Ailment)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:ailment => invalid_attributes}
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        { name: "New Malady" }
-      }
-
-      it "updates the requested ailment" do
-        ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => new_attributes}
-        ailment.reload
-        expect(ailment.name).to eq new_attributes[:name]
-      end
-
+    describe "GET #show" do
       it "assigns the requested ailment as @ailment" do
         ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => valid_attributes}
+        get :show, {:id => ailment.to_param}
         expect(assigns(:ailment)).to eq(ailment)
-      end
-
-      it "updates specialty" do
-        new_specialty = FactoryGirl.create(:specialty)
-        ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => valid_attributes.merge(specialty_id: new_specialty.id)}
-        ailment.reload
-        expect(ailment.specialty).to eq new_specialty
-      end
-
-      it "redirects to the ailment" do
-        ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => valid_attributes}
-        expect(response).to redirect_to(ailment)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns the ailment as @ailment" do
-        ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => invalid_attributes}
-        expect(assigns(:ailment)).to eq(ailment)
-      end
-
-      it "re-renders the 'edit' template" do
-        ailment = Ailment.create! valid_attributes
-        put :update, {:id => ailment.to_param, :ailment => invalid_attributes}
-        expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested ailment" do
-      ailment = Ailment.create! valid_attributes
-      expect {
+  describe 'as an admin' do
+    before { sign_in FactoryGirl.create(:admin)}
+
+    describe "GET #new" do
+      it "assigns a new ailment as @ailment" do
+        get :new, {}
+        expect(assigns(:ailment)).to be_a_new(Ailment)
+      end
+    end
+
+    describe "GET #edit" do
+      it "assigns the requested ailment as @ailment" do
+        ailment = Ailment.create! valid_attributes
+        get :edit, {:id => ailment.to_param}
+        expect(assigns(:ailment)).to eq(ailment)
+      end
+    end
+
+    describe "POST #create" do
+      context "with valid params" do
+        it "creates a new Ailment" do
+          expect {
+            post :create, {:ailment => valid_attributes}
+          }.to change(Ailment, :count).by(1)
+        end
+
+        it "assigns a newly created ailment as @ailment" do
+          post :create, {:ailment => valid_attributes}
+          expect(assigns(:ailment)).to be_a(Ailment)
+          expect(assigns(:ailment)).to be_persisted
+        end
+
+        it "assigns specialty" do
+          post :create, {:ailment => valid_attributes}
+          expect(Ailment.last.specialty).to eq specialty
+        end
+
+        it "redirects to the created ailment" do
+          post :create, {:ailment => valid_attributes}
+          expect(response).to redirect_to(Ailment.last)
+        end
+      end
+
+      context "with invalid params" do
+        it "assigns a newly created but unsaved ailment as @ailment" do
+          post :create, {:ailment => invalid_attributes}
+          expect(assigns(:ailment)).to be_a_new(Ailment)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:ailment => invalid_attributes}
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) {
+          { name: "New Malady" }
+        }
+
+        it "updates the requested ailment" do
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => new_attributes}
+          ailment.reload
+          expect(ailment.name).to eq new_attributes[:name]
+        end
+
+        it "assigns the requested ailment as @ailment" do
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => valid_attributes}
+          expect(assigns(:ailment)).to eq(ailment)
+        end
+
+        it "updates specialty" do
+          new_specialty = FactoryGirl.create(:specialty)
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => valid_attributes.merge(specialty_id: new_specialty.id)}
+          ailment.reload
+          expect(ailment.specialty).to eq new_specialty
+        end
+
+        it "redirects to the ailment" do
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => valid_attributes}
+          expect(response).to redirect_to(ailment)
+        end
+      end
+
+      context "with invalid params" do
+        it "assigns the ailment as @ailment" do
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => invalid_attributes}
+          expect(assigns(:ailment)).to eq(ailment)
+        end
+
+        it "re-renders the 'edit' template" do
+          ailment = Ailment.create! valid_attributes
+          put :update, {:id => ailment.to_param, :ailment => invalid_attributes}
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+    describe "DELETE #destroy" do
+      it "destroys the requested ailment" do
+        ailment = Ailment.create! valid_attributes
+        expect {
+          delete :destroy, {:id => ailment.to_param}
+        }.to change(Ailment, :count).by(-1)
+      end
+
+      it "redirects to the ailments list" do
+        ailment = Ailment.create! valid_attributes
         delete :destroy, {:id => ailment.to_param}
-      }.to change(Ailment, :count).by(-1)
-    end
-
-    it "redirects to the ailments list" do
-      ailment = Ailment.create! valid_attributes
-      delete :destroy, {:id => ailment.to_param}
-      expect(response).to redirect_to(ailments_url)
+        expect(response).to redirect_to(ailments_url)
+      end
     end
   end
-
 end

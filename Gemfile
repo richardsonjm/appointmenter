@@ -11,6 +11,7 @@ gem 'sqlite3'
 # Authentication and authorization
 gem 'devise'
 gem 'rolify'
+gem 'cancancan', '~> 1.10'
 
 # Assets
 gem 'sass-rails', '~> 5.0'
