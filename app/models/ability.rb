@@ -22,6 +22,7 @@ class Ability
     end
 
     can :show, User, id: user.id
+    can :show, User, roles: { name: 'doctor' }
     can :index, User, roles: { name: 'doctor' }
 
     can :create, Appointment

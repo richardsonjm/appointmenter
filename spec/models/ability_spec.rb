@@ -84,7 +84,7 @@ RSpec.describe Ability do
       it {should     be_able_to(:index, FactoryGirl.create(:doctor))}
       it {should_not be_able_to(:index, FactoryGirl.create(:patient))}
       it {should     be_able_to(:show, @doctor)}
-      it {should_not be_able_to(:show, FactoryGirl.create(:doctor))}
+      it {should_not be_able_to(:show, FactoryGirl.create(:patient))}
       it {should_not be_able_to(:manage, User)}
     end
 
