@@ -16,6 +16,8 @@ RSpec.feature "Appointment", js: true do
     rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @dermotology)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
     @doctor = FactoryGirl.create(:doctor, specialties: [@dermotology])
+    sign_in_as(@patient)
+
   end
 
   scenario "Schedule appointment for patient" do

@@ -21,8 +21,8 @@ FactoryGirl.define do
 
     factory :doctor do
       sequence(:email) {|n| "doctor#{n}@example.com"}
-      after(:build) do |patient|
-        patient.add_role :patient
+      after(:build) do |doctor|
+        doctor.add_role :doctor
       end
 
       factory :ca_doctor do
@@ -30,6 +30,13 @@ FactoryGirl.define do
         city 'San Fransico'
         state 'CA'
         zip '94101'
+      end
+    end
+
+    factory :admin do
+      sequence(:email) {|n| "admin#{n}@example.com"}
+      after(:build) do |admin|
+        admin.add_role :admin
       end
     end
   end

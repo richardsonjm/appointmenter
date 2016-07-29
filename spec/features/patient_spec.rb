@@ -7,6 +7,7 @@ RSpec.feature "Patient" do
   end
 
   scenario "Show the patient's ailments" do
+    sign_in_as(@patient)
     @patient.ailments << @rash
     visit user_path(@patient)
     expect(page).to have_content @rash.name
@@ -21,10 +22,11 @@ RSpec.feature "Patient" do
   end
 
   scenario "Change patient ailment" do
+    sign_in_as(@patient)
     fever = FactoryGirl.create(:ailment, name: "Fever")
-    visit edit_user_path(@patient)
+    visit edit_user_registration_path(@patient)
     select "Fever", from: "user_ailment_ids"
-    click_button 'Update User'
+    click_button 'Update'
     expect(User.last.ailments).to include fever
     expect(User.last.ailments).not_to include @rash
   end
