@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :appointments, foreign_key: :patient_id, inverse_of: :patient
   has_many :doctors, through: :appointments, foreign_key: :patient_id
 
-  def specialty_ids
+  def ailment_specialty_ids
     ailments.map {|ailment| ailment.specialty_id}
   end
 end

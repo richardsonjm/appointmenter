@@ -40,9 +40,9 @@ describe User do
       it { is_expected.to respond_to :doctor_ids }
     end
 
-    describe "#specialty_ids" do
+    describe "#ailment_specialty_ids" do
       it "returns arary of specialty_ids associated with ailments" do
-        expect(subject.specialty_ids).to eq subject.ailments.map {|a| a.specialty_id}
+        expect(subject.ailment_specialty_ids).to eq subject.ailments.map {|a| a.specialty_id}
       end
     end
   end
