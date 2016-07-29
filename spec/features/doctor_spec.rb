@@ -13,12 +13,13 @@ RSpec.feature "Doctor" do
     expect(page).to have_content @heart.name
   end
 
-  scenario "Create doctor with specialty" do
+  scenario "Create doctor" do
     visit new_user_registration_path
-    fill_person_form(attributes_for(:doctor))
-    select "Heart", from: "user_specialty_ids"
-    click_button 'Sign up'
-    expect(User.last.specialties).to include @heart
+    expect {
+      fill_person_form(attributes_for(:doctor))
+      check 'is_a_doctor'
+      click_button 'Sign up'
+    }.to change(ActionMailer::Base.deliveries, :count).by(1)
   end
 
   scenario "Change doctor specialty" do

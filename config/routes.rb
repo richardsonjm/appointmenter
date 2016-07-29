@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   root 'users#index'
-  devise_for :users, expect: [:new, :create]
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   resources :specialties
   resources :ailments
   resources :doctors
-  resources :users
+  resources :users, except: [:new, :create]
   resources :appointments, only: [:index, :show, :create, :update, :destroy]
 end
