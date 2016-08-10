@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   include PersonConcern
+  has_many :addresses, inverse_of: :user
+
   # Patient associations
   has_many :patients_ailments, foreign_key: :patient_id
   has_many :ailments, through: :patients_ailments

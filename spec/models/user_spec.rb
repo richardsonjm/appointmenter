@@ -8,6 +8,12 @@ describe User do
 
   it_behaves_like 'a person'
 
+  describe "addresses" do
+    it { is_expected.to have_many :addresses }
+    it { is_expected.to respond_to :addresses }
+    it { is_expected.to respond_to :address_ids }
+  end
+
   describe 'patient' do
     before { subject.add_role :patient }
 
