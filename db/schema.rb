@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809181930) do
+ActiveRecord::Schema.define(version: 20160810152112) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "street"
@@ -132,12 +132,6 @@ ActiveRecord::Schema.define(version: 20160809181930) do
     t.datetime "updated_at"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "street"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
-    t.float    "latitude"
-    t.float    "longitude"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

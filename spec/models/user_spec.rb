@@ -1,17 +1,61 @@
 require 'rails_helper'
-require 'support/person_examples'
 
 describe User do
   subject { create :user }
 
   it { is_expected.to be_valid }
 
-  it_behaves_like 'a person'
+  describe "database fields" do
+    it { is_expected.to have_db_column(:email) }
+    it { is_expected.to have_db_column(:first_name) }
+    it { is_expected.to have_db_column(:last_name) }
+  end
+
+  describe '#email' do
+    it { is_expected.to respond_to :email }
+    it { is_expected.to validate_presence_of(:email) }
+
+    context 'when valid' do
+      before { subject.email = 'jondoe@person.com' }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when not valid' do
+      before { subject.email = 'invalid_email' }
+
+      it { is_expected.to_not be_valid }
+    end
+  end
+
+  describe '#first_name' do
+    it { is_expected.to respond_to :first_name }
+    it { is_expected.to validate_presence_of(:first_name) }
+  end
+
+  describe '#last_name' do
+    it { is_expected.to respond_to :last_name }
+    it { is_expected.to validate_presence_of(:last_name) }
+  end
 
   describe "addresses" do
     it { is_expected.to have_many :addresses }
     it { is_expected.to respond_to :addresses }
     it { is_expected.to respond_to :address_ids }
+  end
+
+  describe '#name' do
+    let(:first_name) { subject.first_name }
+    let(:last_name) { subject.last_name }
+    let(:name) { subject.name }
+
+    it 'includes #first_name' do
+      expect(name.include?(first_name)).to be_truthy
+    end
+
+    it 'includes #last_name' do
+      expect(name.include?(last_name)).to be_truthy
+    end
   end
 
   describe 'patient' do
@@ -121,9 +165,9 @@ describe User do
       end
       @patient = FactoryGirl.create(:patient, ailments: ailments[0..1])
       @patient_doctors = [0,1].map do |index|
-        FactoryGirl.create(:doctor, specialties: [specialties[index]])
+        FactoryGirl.create(:ny_doctor, specialties: [specialties[index]])
       end
-      other_doctors = FactoryGirl.create_list(:doctor, 3, specialties: [specialties[2]])
+      other_doctors = FactoryGirl.create_list(:ny_doctor, 3, specialties: [specialties[2]])
     end
 
     it "returns doctors with specialties that match patient ailments" do
