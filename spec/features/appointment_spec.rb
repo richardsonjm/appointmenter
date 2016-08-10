@@ -15,7 +15,7 @@ RSpec.feature "Appointment", js: true do
     @dermotology = FactoryGirl.create(:specialty, name: "Dermotologist")
     rash = FactoryGirl.create(:ailment, name: "Rash", specialty: @dermotology)
     @patient = FactoryGirl.create(:patient, ailments: [rash])
-    @doctor = FactoryGirl.create(:doctor, specialties: [@dermotology])
+    @doctor = FactoryGirl.create(:ny_doctor, specialties: [@dermotology])
     sign_in_as(@patient)
   end
 

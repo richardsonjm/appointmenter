@@ -26,7 +26,7 @@ RSpec.describe AppointmentsController, type: :controller do
   before do
     ailment = FactoryGirl.create(:ailment)
     @patient = FactoryGirl.create(:patient, ailments: [ailment])
-    @doctor = FactoryGirl.create(:doctor, specialties: [ailment.specialty])
+    @doctor = FactoryGirl.create(:ny_doctor, specialties: [ailment.specialty])
   end
 
   let(:valid_attributes) {

@@ -15,7 +15,7 @@ describe UsersController do
 
     context "GET #index" do
       it "assigns all users as @users" do
-        doctor = FactoryGirl.create(:doctor)
+        doctor = FactoryGirl.create(:ny_doctor)
         get :index, {}
         expect(assigns(:users)).to eq([doctor])
       end

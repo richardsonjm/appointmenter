@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Doctor" do
   before do
     @heart = FactoryGirl.create(:specialty, name: "Heart")
-    @doctor = FactoryGirl.create(:doctor)
+    @doctor = FactoryGirl.create(:ny_doctor)
   end
 
   scenario "Show the doctor's specialties" do

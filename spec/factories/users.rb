@@ -7,10 +7,9 @@ FactoryGirl.define do
     password_confirmation '123456789'
     confirmed_at Time.now
 
-    sequence(:street) {|n| "10#{n} Broadway"}
-    city 'New York'
-    state 'NY'
-    zip '10013'
+    after(:build) do |user|
+      FactoryGirl.create(:address, user: user) unless user.addresses.any?
+    end
 
     factory :patient do
       sequence(:email) {|n| "patient#{n}@example.com"}
@@ -27,11 +26,26 @@ FactoryGirl.define do
         doctor.specialties << FactoryGirl.create(:specialty) unless doctor.specialties.any?
       end
 
+      factory :ny_doctor do
+        after(:build) do |ny_doctor|
+          unless ny_doctor.addresses.where(address_type: 1).any?
+            FactoryGirl.create(:address, user: ny_doctor, address_type: 1)
+          end
+        end
+      end
+
       factory :ca_doctor do
-        sequence(:street) {|n| "10#{n} Market"}
-        city 'San Fransico'
-        state 'CA'
-        zip '94101'
+        after(:build) do |ca_doctor|
+          unless ca_doctor.addresses.where(address_type: 1).any?
+            FactoryGirl.create(:address,
+              user: ca_doctor,
+              address_type: 1,
+              street: "101 Market",
+              city: 'San Fransico',
+              state: 'CA',
+              zip: '94101')
+          end
+        end
       end
     end
 
