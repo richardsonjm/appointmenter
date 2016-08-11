@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
+    @users_and_address = {}
+    @users.each do |user|
+      @users_and_address[user] = user.has_role?(:doctor) ? Address.business_for(user) : Address.home_for(user)
+    end
   end
 
   # GET /users/1

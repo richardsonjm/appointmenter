@@ -7,23 +7,17 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      <th>Street</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Zip</th>
+      <th>Address</th>
       <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
+    <% @users_and_address.each do |user, address| %>
       <tr>
         <td><%= link_to user.name, user %></td>
         <td><%= user.email %></td>
-        <!-- <td><#%= user.street %></td>
-        <td><#%= user.city %></td>
-        <td><#%= user.state_name %></td>
-        <td><#%= user.zip %></td> -->
+        <td><%= address.full_street_address %></td>
         <% if current_user.has_role? :admin %>
           <td><%= link_to 'Edit', edit_user_path(user) %></td>
           <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>

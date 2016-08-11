@@ -17,5 +17,9 @@ module Person
       fill_in 'Password', with: '123456789'
       click_button 'Log in'
     end
+
+    def sign_out
+      click_link 'Sign out'
+    end
   end
 end
