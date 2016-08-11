@@ -4,10 +4,33 @@
   User
 </h1>
 
-<%= render partial: "shared/show_person", locals: { person: @user} %>
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
 
 <% if (@user == current_user) || current_user.has_role?(:admin) %>
+
+  <%= render partial: "addresses/home", locals: { address: Address.home_for(@user)} %>
+
+  <% if @user.ailments.any? %>
+    <strong>Ailments:</strong>
+    <ul>
+      <%= render @user.ailments %>
+    </ul>
+  <% end %>
+
   <% if @user.has_role? :doctor %>
+    <strong>Specialties:</strong>
+    <ul>
+      <%= render @user.specialties %>
+    </ul>
+
     <strong>Patient Appointments:</strong>
     <table>
       <thead>
