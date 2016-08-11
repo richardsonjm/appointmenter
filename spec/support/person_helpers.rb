@@ -4,7 +4,7 @@ module Person
       attributes.except(:state, :role, :confirmed_at).each do |attribute, value|
         fill_in attribute.to_s.humanize, with: value
       end
-      select PersonConcern::US_STATES[attributes[:state]], from: "State"
+      select Address::US_STATES[attributes[:state]], from: "State"
     end
 
     def sign_in_as(user)
