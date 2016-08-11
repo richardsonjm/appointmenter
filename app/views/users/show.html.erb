@@ -1,13 +1,10 @@
 <p id="notice"><%= notice %></p>
 
 <h1>
-  User
+  <%= @user.name %>
 </h1>
 
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
+<%= link_to 'Edit', edit_user_registration_path(@user) if ((@user == current_user) || current_user.has_role?(:admin)) %>
 
 <p>
   <strong>Email:</strong>
@@ -15,63 +12,64 @@
 </p>
 
 <% if (@user == current_user) || current_user.has_role?(:admin) %>
-
   <%= render partial: "addresses/home", locals: { address: Address.home_for(@user)} %>
-
   <% if @user.ailments.any? %>
     <strong>Ailments:</strong>
     <ul>
       <%= render @user.ailments %>
     </ul>
   <% end %>
-
-  <% if @user.has_role? :doctor %>
-    <strong>Specialties:</strong>
-    <ul>
-      <%= render @user.specialties %>
-    </ul>
-
-    <strong>Patient Appointments:</strong>
-    <table>
-      <thead>
-        <tr>
-          <th>Patient</th>
-          <th>Time</th>
-          <th colspan="2"></th>
-        </tr>
-      </thead>
-
-      <tbody id="patient-appointments">
-        <% @user.patient_appointments.each do |patient_appointment| %>
-          <%= render partial: 'appointments/patient_appointment', object: patient_appointment %>
-        <% end %>
-      </tbody>
-    </table><br>
-  <% end %>
-
-  <% if @user.has_role? :patient %>
-    <strong>Doctor Appointments:</strong>
-    <table>
-      <thead>
-        <tr>
-          <th>Doctor</th>
-          <th>Time</th>
-          <th colspan="2"></th>
-        </tr>
-      </thead>
-
-      <tbody id="doctor-appointments">
-        <% @user.doctor_appointments.each do |doctor_appointment| %>
-          <%= render partial: 'appointments/doctor_appointment', object: doctor_appointment %>
-        <% end %>
-      </tbody>
-    </table><br>
-
-    <div id="new-patient-appointment">
-      <%= render partial: 'appointments/form', locals: {patient: @user, appointment: Appointment.new } %>
-    </div>
-  <% end %>
-
-  <%= link_to 'Edit', edit_user_registration_path(@user) %> |
 <% end %>
+
+<% if @user.has_role? :doctor %>
+  <%= render partial: "addresses/business", locals: { address: Address.business_for(@user)} %>
+  <strong>Specialties:</strong>
+  <ul>
+    <%= render @user.specialties %>
+  </ul>
+<% end %>
+
+
+<% if current_user.has_role?(:admin) || ((@user == current_user) && @user.has_role?(:doctor)) %>
+  <strong>Patient Appointments:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Time</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody id="patient-appointments">
+      <% @user.patient_appointments.each do |patient_appointment| %>
+        <%= render partial: 'appointments/patient_appointment', object: patient_appointment %>
+      <% end %>
+    </tbody>
+  </table><br>
+<% end %>
+
+<% if current_user.has_role?(:admin) || ((@user == current_user) && @user.has_role?(:patient)) %>
+  <strong>Doctor Appointments:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Time</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody id="doctor-appointments">
+      <% @user.doctor_appointments.each do |doctor_appointment| %>
+        <%= render partial: 'appointments/doctor_appointment', object: doctor_appointment %>
+      <% end %>
+    </tbody>
+  </table><br>
+
+  <div id="new-patient-appointment">
+    <%= render partial: 'appointments/form', locals: {patient: @user, appointment: Appointment.new } %>
+  </div>
+<% end %>
+
 <%= link_to 'Back', users_path %>

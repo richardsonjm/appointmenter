@@ -1,10 +1,14 @@
 module Person
   module TestHelpers
     def fill_person_form(attributes)
-      attributes.except(:state, :role, :confirmed_at).each do |attribute, value|
+      attributes.except(:role, :confirmed_at).each do |attribute, value|
         fill_in attribute.to_s.humanize, with: value
       end
-      select Address::US_STATES[attributes[:state]], from: "State"
+      address_attributes = attributes_for(:address)
+      address_attributes.except(:state, :address_type).each do |attribute, value|
+        fill_in attribute.to_s.humanize, with: value
+      end
+      select Address::US_STATES[address_attributes[:state]], from: "State"
     end
 
     def sign_in_as(user)
