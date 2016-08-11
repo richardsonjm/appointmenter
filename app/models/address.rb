@@ -90,4 +90,8 @@ class Address < ActiveRecord::Base
   def self.home_for(user)
     where(address_type: 0, user: user).first
   end
+
+  def self.business_for(user)
+    where(address_type: 1, user: user).first
+  end
 end
