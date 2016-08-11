@@ -16,7 +16,7 @@ RSpec.feature "Doctor" do
   scenario "Create doctor sends verification email" do
     visit new_user_registration_path
     expect {
-      fill_person_form(attributes_for(:doctor))
+      fill_user_form(attributes_for(:doctor))
       check 'is_a_doctor'
       click_button 'Sign up'
     }.to change(ActionMailer::Base.deliveries, :count).by(1)
@@ -25,7 +25,7 @@ RSpec.feature "Doctor" do
   scenario "Create doctor creates new address" do
     visit new_user_registration_path
     expect {
-      fill_person_form(attributes_for(:doctor))
+      fill_user_form(attributes_for(:doctor))
       check 'is_a_doctor'
       click_button 'Sign up'
     }.to change(Address, :count).by(1)

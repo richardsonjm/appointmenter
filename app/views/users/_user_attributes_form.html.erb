@@ -13,7 +13,7 @@
 <%= form.fields_for :addresses, (defined?(resource) ? Address.home_for(resource) : Address.home_for(@user)) || Address.new do |builder| %>
   <%= render "users/address_fields", f: builder %>
 <% end %>
-<% if person.has_role? :doctor %>
+<% if user.has_role? :doctor %>
   <div class="field">
     <%= form.label :specialty_ids, 'Specialties' %><br>
     <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true} %>

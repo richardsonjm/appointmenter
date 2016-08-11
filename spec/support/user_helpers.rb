@@ -1,6 +1,6 @@
-module Person
+module Users
   module TestHelpers
-    def fill_person_form(attributes)
+    def fill_user_form(attributes)
       attributes.except(:role, :confirmed_at).each do |attribute, value|
         fill_in attribute.to_s.humanize, with: value
       end
