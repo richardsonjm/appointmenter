@@ -26,7 +26,9 @@ class User < ActiveRecord::Base
 
   def self.patient_doctors(patient)
     specialty_ids = patient.ailment_specialty_ids
-    User.joins(:doctors_specialties).where(doctors_specialties: {specialty_id: specialty_ids})
+    doctors = User.joins(:doctors_specialties).where(doctors_specialties: {specialty_id: specialty_ids})
+    nearby_doctors_addresses = Address.where(address_type: 1, user_id: doctors.pluck(:id)).near(Address.home_for(patient))
+    doctors.where(id: nearby_doctors_addresses.map(&:user_id))
   end
 
   def ailment_specialty_ids
