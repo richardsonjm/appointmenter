@@ -10,17 +10,17 @@
   <%= form.label :last_name %><br>
   <%= form.text_field :last_name %>
 </div>
-<%= form.fields_for :addresses, Address.home_for(resource) || Address.new do |builder| %>
+<%= form.fields_for :addresses, (defined?(resource) ? Address.home_for(resource) : Address.home_for(@user)) || Address.new do |builder| %>
   <%= render "users/address_fields", f: builder %>
 <% end %>
 <% if person.has_role? :doctor %>
   <div class="field">
-    <%= form.label :specialty_ids %><br>
+    <%= form.label :specialty_ids, 'Specialties' %><br>
     <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true} %>
   </div>
 <% end %>
 <div class="field">
-  <%= form.label :ailment_ids %><br>
+  <%= form.label :ailment_ids, 'Ailments' %><br>
   <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
 </div>
 <% if current_user && current_user.has_role?(:admin) %>
