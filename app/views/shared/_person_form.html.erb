@@ -10,22 +10,9 @@
   <%= form.label :last_name %><br>
   <%= form.text_field :last_name %>
 </div>
-<div class="field">
-  <%= form.label :street %><br>
-  <%= form.text_field :street %>
-</div>
-<div class="field">
-  <%= form.label :city %><br>
-  <%= form.text_field :city %>
-</div>
-<div class="field">
-  <%= form.label :state %><br>
-  <%= form.select :state, options_for_select(us_state_options, person.state) %>
-</div>
-<div class="field">
-  <%= form.label :zip %><br>
-  <%= form.text_field :zip %>
-</div>
+<%= form.fields_for :addresses, Address.home_for(resource) || Address.new do |builder| %>
+  <%= render "users/address_fields", f: builder %>
+<% end %>
 <% if person.has_role? :doctor %>
   <div class="field">
     <%= form.label :specialty_ids %><br>

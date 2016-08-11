@@ -86,4 +86,8 @@ class Address < ActiveRecord::Base
   def address_type_name
     VALID_ADDRESS_TYPES[address_type]
   end
+
+  def self.home_for(user)
+    where(address_type: 0, user: user).first
+  end
 end
