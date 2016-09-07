@@ -3,6 +3,11 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
+  <div class="field">
+    <%= label_tag :is_a_doctor, "Please check box if you are a doctor" %><br />
+    <%= check_box_tag :is_a_doctor %>
+  </div>
+
   <%= render partial: "users/user_attributes_form", locals: { form: f, user: resource } %>
 
   <div class="field">
@@ -16,11 +21,6 @@
   <div class="field">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
-
-  <div class="field">
-    <%= label_tag :is_a_doctor, "Please check box if you are a doctor" %><br />
-    <%= check_box_tag :is_a_doctor %>
   </div>
 
   <div class="actions">

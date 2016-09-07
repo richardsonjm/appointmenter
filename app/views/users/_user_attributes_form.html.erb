@@ -10,19 +10,29 @@
   <%= form.label :last_name %><br>
   <%= form.text_field :last_name %>
 </div>
-<%= form.fields_for :addresses, (defined?(resource) ? Address.home_for(resource) : Address.home_for(@user)) || Address.new do |builder| %>
-  <%= render "users/address_fields", f: builder %>
-<% end %>
+
 <% if user.has_role? :doctor %>
   <div class="field">
     <%= form.label :specialty_ids, 'Specialties' %><br>
     <%= form.collection_select :specialty_ids, Specialty.all, :id, :name, {}, {multiple:true} %>
   </div>
+
+  <%= form.fields_for :addresses, (defined?(resource) ? Address.business_for(resource) : Address.business_for(@user)) || Address.new do |builder| %>
+    <%= render "users/address_fields", f: builder %>
+  <% end %>
 <% end %>
-<div class="field">
-  <%= form.label :ailment_ids, 'Ailments' %><br>
-  <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
-</div>
+
+<% if user.has_role?(:patient) || (!user.has_role?(:patient) && !user.has_role?(:doctor)) %>
+  <div class="field">
+    <%= form.label :ailment_ids, 'Ailments' %><br>
+    <%= form.collection_select :ailment_ids, Ailment.all, :id, :name, {}, {multiple:true} %>
+  </div>
+
+  <%= form.fields_for :addresses, (defined?(resource) ? Address.home_for(resource) : Address.home_for(@user)) || Address.new do |builder| %>
+    <%= render "users/address_fields", f: builder %>
+  <% end %>
+<% end %>
+
 <% if current_user && current_user.has_role?(:admin) %>
   <div class="actions">
     <%= form.submit %>
