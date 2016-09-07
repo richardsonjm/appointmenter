@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'Patient was successfully updated.' }
+        format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -44,9 +44,17 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'Patient was successfully destroyed.' }
+      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def confirm_doctor
+    user = User.find(params["user_id"])
+    user.update_attributes(unconfirmed_doctor: false)
+    user.add_role :doctor
+    Address.home_for(user).update_attributes(address_type: 1)
+    redirect_to users_url, notice: "#{user.name} was successfully confirmed."
   end
 
   private

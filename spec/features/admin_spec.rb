@@ -52,4 +52,16 @@ RSpec.feature "Admin" do
     }.to change(@doctor.specialties, :count).by(1)
     expect(@doctor.specialties).to include new_specialty
   end
+
+  scenario "Admin can confirm doctor" do
+    new_doctor = FactoryGirl.create(:user, unconfirmed_doctor: true)
+    visit users_path
+    confirm_link = find(:xpath, "//a[@href='#{user_confirm_doctor_path(new_doctor)}']")
+    expect {
+      confirm_link.click
+      new_doctor.reload
+    }.to change(new_doctor.roles, :count).by(1)
+    expect(new_doctor.has_role? :doctor).to be_truthy
+    expect(new_doctor.unconfirmed_doctor?).to be_falsey
+  end
 end

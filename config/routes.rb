@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :specialties
   resources :ailments
   resources :doctors
-  resources :users, except: [:new, :create]
+  resources :users, except: [:new, :create] do
+    post :confirm_doctor
+  end
   resources :appointments, only: [:index, :show, :create, :update, :destroy]
 end

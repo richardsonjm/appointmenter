@@ -104,5 +104,25 @@ describe UsersController do
         expect(response).to redirect_to(users_url)
       end
     end
+
+    describe "Post #confirm_doctor" do
+      before do
+        @user = FactoryGirl.create(:user, unconfirmed_doctor: true)
+      end
+
+      it "confirms the requested user is a doctor" do
+        expect {
+          post :confirm_doctor, {:user_id => @user.to_param}
+          @user.reload
+        }.to change(@user, :unconfirmed_doctor)
+        expect(@user.has_role? :doctor).to be_truthy
+        expect(@user.addresses.first.address_type).to eq 1
+      end
+
+      it "redirects to the users list" do
+        post :confirm_doctor, {:user_id => @user.to_param}
+        expect(response).to redirect_to(users_url)
+      end
+    end
   end
 end

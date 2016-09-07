@@ -12,6 +12,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super do |resource|
       if resource.persisted?
         if params[:is_a_doctor] == '1'
+          resource.update_attributes(unconfirmed_doctor: true)
           IsADoctorMailer.send(:new_doctor_request, resource).deliver_now
         else
           resource.add_role :patient
