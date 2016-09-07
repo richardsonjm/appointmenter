@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Doctor" do
   before do
     @heart = FactoryGirl.create(:specialty, name: "Heart")
-    @doctor = FactoryGirl.create(:doctor)
+    @doctor = FactoryGirl.create(:ny_doctor)
   end
 
   scenario "Show the doctor's specialties" do
@@ -13,13 +13,32 @@ RSpec.feature "Doctor" do
     expect(page).to have_content @heart.name
   end
 
-  scenario "Create doctor" do
+  scenario "Create doctor sends verification email" do
     visit new_user_registration_path
     expect {
-      fill_person_form(attributes_for(:doctor))
+      fill_user_form(attributes_for(:doctor))
       check 'is_a_doctor'
       click_button 'Sign up'
     }.to change(ActionMailer::Base.deliveries, :count).by(1)
+  end
+
+  scenario "Create doctor sets unconfirmed_doctor to true" do
+    visit new_user_registration_path
+    expect {
+      fill_user_form(attributes_for(:doctor))
+      check 'is_a_doctor'
+      click_button 'Sign up'
+    }.to change(User, :count).by(1)
+    expect(User.last.unconfirmed_doctor?).to be_truthy
+  end
+
+  scenario "Create doctor creates new address" do
+    visit new_user_registration_path
+    expect {
+      fill_user_form(attributes_for(:doctor))
+      check 'is_a_doctor'
+      click_button 'Sign up'
+    }.to change(Address, :count).by(1)
   end
 
   scenario "Change doctor specialty" do

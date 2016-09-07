@@ -26,7 +26,7 @@ RSpec.describe AppointmentsController, type: :controller do
   before do
     ailment = FactoryGirl.create(:ailment)
     @patient = FactoryGirl.create(:patient, ailments: [ailment])
-    @doctor = FactoryGirl.create(:doctor, specialties: [ailment.specialty])
+    @doctor = FactoryGirl.create(:ny_doctor, specialties: [ailment.specialty])
   end
 
   let(:valid_attributes) {
@@ -55,10 +55,21 @@ RSpec.describe AppointmentsController, type: :controller do
     end
 
     context "GET #show" do
-      it "assigns the requested doctor as @doctor" do
-        appointment = Appointment.create! valid_attributes
-        get :show, {:id => appointment.to_param}
-        expect(assigns(:appointment)).to eq(appointment)
+      before do
+        @appointment = Appointment.create! valid_attributes
+        get :show, {:id => @appointment.to_param}
+      end
+
+      it "assigns the requested appointment as @appointment" do
+        expect(assigns(:appointment)).to eq(@appointment)
+      end
+
+      it "assigns patient address" do
+        expect(assigns(:patient_address)).to eq Address.home_for(@appointment.patient)
+      end
+
+      it "assigns doctor address" do
+        expect(assigns(:doctor_address)).to eq Address.business_for(@appointment.doctor)
       end
     end
 

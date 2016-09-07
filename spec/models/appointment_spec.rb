@@ -49,7 +49,7 @@ RSpec.describe Appointment, type: :model do
     before do
       ailment = FactoryGirl.create(:ailment)
       patient = FactoryGirl.create(:patient, ailments: [ailment])
-      doctor = FactoryGirl.create(:doctor, specialties: [FactoryGirl.create(:specialty)])
+      doctor = FactoryGirl.create(:ny_doctor, specialties: [FactoryGirl.create(:specialty)])
       @invalid_appointment = FactoryGirl.build(:appointment, doctor: doctor, patient: patient)
   end
 

@@ -15,7 +15,7 @@ end
 
 # Doctors
 [orthopedics, opthamology, cardiology].each do |specialty|
-  FactoryGirl.create(:doctor, specialties: [specialty])
+  FactoryGirl.create(:ny_doctor, specialties: [specialty])
 end
 
 # Admin

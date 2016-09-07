@@ -9,10 +9,13 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     keys = Proc.new do |u|
       u.permit(
-        { specialty_ids: [], ailment_ids: [] },
+        {
+          specialty_ids: [],
+          ailment_ids: [],
+          addresses_attributes: [:id, :street, :city, :state, :zip]
+        },
         :password, :password_confirmation, :current_password,
-        :email, :first_name, :last_name,
-        :street, :city, :state, :zip
+        :email, :first_name, :last_name
       )
     end
     devise_parameter_sanitizer.for(:sign_up, &keys)

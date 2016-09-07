@@ -10,6 +10,8 @@ class AppointmentsController < ApplicationController
   # GET /appointments/1
   # GET /appointments/1.json
   def show
+    @doctor_address = Address.business_for(@appointment.doctor)
+    @patient_address = Address.home_for(@appointment.patient)
   end
 
   # POST /appointments

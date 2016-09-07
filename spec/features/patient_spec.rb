@@ -15,7 +15,7 @@ RSpec.feature "Patient" do
 
   scenario "Create patient with ailment" do
     visit new_user_registration_path
-    fill_person_form(attributes_for(:patient))
+    fill_user_form(attributes_for(:patient))
     select "Rash", from: "user_ailment_ids"
     click_button 'Sign up'
     expect(User.last.ailments).to include @rash

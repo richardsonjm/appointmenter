@@ -1,5 +1,5 @@
-module PersonConcern
-  extend ActiveSupport::Concern
+class Address < ActiveRecord::Base
+  belongs_to :user, inverse_of: :addresses
 
   US_STATES = {
     'AL' => 'Alabama',
@@ -58,23 +58,18 @@ module PersonConcern
 
   VALID_STATES = US_STATES.keys.freeze
 
-  class EmailValidator < ActiveModel::EachValidator
-    def validate_each(record, attribute, value)
-      unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-        record.errors[attribute] <<
-          (options[:message] || "is not a valid email address")
-      end
-    end
-  end
+  VALID_ADDRESS_TYPES = %w(home business)
 
-  class ZipCodeValidator< ActiveModel::EachValidator
-    def validate_each(record, attribute, value)
-      unless value =~ /^\d{5}(-\d{4})?$/
-        record.errors[attribute] <<
-          (options[:message] || "is not a valid zip code")
-      end
-    end
-  end
+  validates :street, presence: true
+  validates :city, presence: true
+  validates :state, presence: true, inclusion: { in: VALID_STATES,
+                                                 message: "is not a US State"}
+  validates :zip, presence: true, zip_code: true
+  validates :address_type, presence: true, numericality: { less_than: VALID_ADDRESS_TYPES.count,
+                                                           greater_than_or_equal_to: 0 }
+
+  geocoded_by :full_street_address
+  after_validation :geocode, if: :full_street_address_changed?
 
   def state_name
     US_STATES[state]
@@ -88,18 +83,15 @@ module PersonConcern
     street_changed? || city_changed? || state_changed?
   end
 
-  included do
-    validates :email, presence: true, email: true
-    validates :first_name, presence: true
-    validates :last_name, presence: true
+  def address_type_name
+    VALID_ADDRESS_TYPES[address_type]
+  end
 
-    validates :street, presence: true
-    validates :city, presence: true
-    validates :state, presence: true, inclusion: { in: VALID_STATES,
-                                                   message: "is not a US State"}
-    validates :zip, presence: true, zip_code: true
+  def self.home_for(user)
+    where(address_type: 0, user: user).first
+  end
 
-    geocoded_by :full_street_address
-    after_validation :geocode, if: :full_street_address_changed?
+  def self.business_for(user)
+    where(address_type: 1, user: user).first
   end
 end

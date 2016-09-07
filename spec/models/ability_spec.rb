@@ -42,7 +42,7 @@ RSpec.describe Ability do
     end
 
     context "users" do
-      it {should     be_able_to(:index, FactoryGirl.create(:doctor))}
+      it {should     be_able_to(:index, FactoryGirl.create(:ny_doctor))}
       it {should_not be_able_to(:index, FactoryGirl.create(:patient))}
       it {should     be_able_to(:show, @patient)}
       it {should_not be_able_to(:show, FactoryGirl.create(:patient))}
@@ -76,12 +76,12 @@ RSpec.describe Ability do
 
   describe "as doctor" do
     before do
-      @doctor = FactoryGirl.create(:doctor)
+      @doctor = FactoryGirl.create(:ny_doctor)
       @ability = Ability.new(@doctor)
     end
 
     context "users" do
-      it {should     be_able_to(:index, FactoryGirl.create(:doctor))}
+      it {should     be_able_to(:index, FactoryGirl.create(:ny_doctor))}
       it {should_not be_able_to(:index, FactoryGirl.create(:patient))}
       it {should     be_able_to(:show, @doctor)}
       it {should_not be_able_to(:show, FactoryGirl.create(:patient))}

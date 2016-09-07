@@ -3,7 +3,7 @@ Dear <%= @doctor.name %>,
 You have a new apointment scheduled with <%=  @patient.name %>.
 
 Date: <%= human_readable_date(@appointment.date) %>
-Location: <%=  @doctor.full_street_address %>
+Location: <%=  Address.business_for(@doctor).full_street_address %>
 
 Remember to wash your hands before and after any patient contact!
 
